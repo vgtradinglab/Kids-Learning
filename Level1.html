@@ -1,0 +1,931 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Agasthya &amp; Vibhavari Learning Corner</title>
+<meta name="theme-color" content="#FBF6EC">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@500;700;800&display=swap">
+<style>
+/* Layout: home doorway → two worlds. Road/garage for the 5-year-old, craft table for the 11-year-old. Level chips + activity tabs + one stage. */
+:root{
+  color-scheme: light;
+  --ink:#23232B; --muted:#5E5A66; --line:#E7DFD0;
+  --road:#2E3138; --lane:#F6C431; --signal:#E8432E; --sky:#DCEFF7;
+  --paper:#FBF6EC; --kraft:#E9D9BF; --felt:#E86A8E; --teal:#2A9D8F; --thread:#3B2F2A; --plum:#6D4C8D;
+  --ok:#2F9E58; --okbg:#E3F5E9; --warn:#D9822B; --bad:#D9472B; --badbg:#FBE3DE;
+  --display:"Baloo 2",system-ui,sans-serif;
+  --body:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-top:max(16px,env(safe-area-inset-top,0px));padding-bottom:max(40px,env(safe-area-inset-bottom,0px))}
+[hidden]{display:none!important}
+.wrap{max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1,h2,h3{font-family:var(--display);line-height:1.1;margin:0;text-wrap:balance}
+button{font:inherit;cursor:pointer;color:inherit}
+button:disabled{opacity:.5;cursor:default}
+button:focus-visible{outline:3px solid var(--plum);outline-offset:3px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+/* Home */
+.hello{display:flex;flex-direction:column;gap:4px;padding-top:4px}
+.hello h1{font-size:clamp(28px,6vw,44px);font-weight:800}
+.hello p{margin:0;color:var(--muted);max-width:60ch}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.door{border:0;border-radius:22px;padding:22px;text-align:left;display:flex;flex-direction:column;gap:8px;min-height:210px;position:relative;overflow:hidden;transition:transform .15s}
+.door:hover{transform:translateY(-3px)}
+.door h2{font-size:32px}
+.door p{margin:0;max-width:32ch;font-weight:700}
+.tag{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;opacity:.85}
+.door.ag{background:var(--road);color:#fff}
+.door.ag::after{content:"";position:absolute;left:0;right:0;bottom:30px;height:6px;background:repeating-linear-gradient(90deg,var(--lane) 0 34px,transparent 34px 60px)}
+.door.ag .mini-car{position:absolute;right:18px;bottom:40px;width:96px;color:var(--signal)}
+.door.vb{background:var(--kraft);color:var(--thread);outline:3px dashed rgba(59,47,42,.35);outline-offset:-12px}
+.door.vb .mini-q{position:absolute;right:22px;bottom:22px;display:grid;grid-template-columns:repeat(3,22px);gap:4px}
+.door.vb .mini-q i{width:22px;height:22px;border-radius:5px;display:block;border:1px dashed rgba(59,47,42,.35)}
+.panel{background:#fff;border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:10px;border:1px solid var(--line)}
+.panel h3{font-size:20px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-weight:700;font-size:14px;font-variant-numeric:tabular-nums}
+.chip.miss{background:#FDE7EC;border-color:#F4C3CF}
+.small{font-size:13px;color:var(--muted);margin:0}
+.tips{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px;font-size:15px;max-width:68ch}
+.linkbtn{border:0;background:none;color:var(--bad);font-weight:800;padding:0;text-decoration:underline;font-size:14px}
+
+/* World shell */
+.world{display:flex;flex-direction:column;gap:12px}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.back{border:0;background:rgba(0,0,0,.08);border-radius:999px;padding:8px 14px;font-weight:800}
+.top h2{font-size:26px;flex:1;min-width:0}
+.levels{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.levels .lbl{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--muted);margin-right:4px}
+.lv{border:2px solid var(--line);background:#fff;border-radius:999px;padding:5px 14px;font-weight:800;font-size:14px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tab{border:2px solid var(--line);border-radius:14px;padding:8px 13px;font-weight:800;font-size:15px;background:#fff}
+.stage{border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center;min-height:360px}
+.prompt{font-family:var(--display);font-size:clamp(22px,4.5vw,30px);font-weight:700;text-wrap:balance}
+.hint{margin:0;color:var(--muted);font-weight:700}
+.opts{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;width:100%}
+.opt{border:3px solid transparent;border-radius:18px;background:#fff;min-width:84px;padding:12px 18px;font-family:var(--display);font-size:26px;font-weight:700;transition:transform .1s}
+.opt:active{transform:scale(.96)}
+.opt.right,.sent.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong,.sent.wrong{border-color:var(--bad);background:var(--badbg);animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.say{border:0;border-radius:999px;padding:9px 16px;font-weight:800;display:inline-flex;gap:6px;align-items:center}
+.feedback{min-height:28px;font-weight:800;font-size:18px}
+.feedback.ok{color:var(--ok)} .feedback.no{color:var(--bad)} .feedback.mid{color:var(--warn)}
+.explain{background:#fff;border-radius:14px;padding:12px 16px;text-align:left;max-width:62ch;width:100%;border-left:5px solid var(--teal)}
+.next{border:0;border-radius:14px;padding:12px 26px;font-weight:800;font-size:17px;color:#fff}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ghost{border:2px solid currentColor;background:transparent;border-radius:14px;padding:10px 18px;font-weight:800}
+
+/* Agasthya */
+.ag-world .top h2{color:var(--road)}
+.ag-world .tab{font-size:17px;padding:10px 18px}
+.ag-world .tab.on,.ag-world .lv.on{background:var(--road);color:var(--lane);border-color:var(--road)}
+.ag-world .stage{background:var(--sky)}
+.ag-world .say{background:var(--lane);color:var(--road)}
+.ag-world .next{background:var(--signal)}
+.track{background:var(--road);border-radius:18px;padding:14px 16px 12px;display:flex;flex-direction:column;gap:6px;color:#fff}
+.lane{position:relative;height:44px;background:repeating-linear-gradient(90deg,var(--lane) 0 22px,transparent 22px 40px) center/100% 4px no-repeat}
+.lane .flag{position:absolute;right:0;top:4px;width:30px;height:36px;background:conic-gradient(#fff 25%,#111 0 50%,#fff 0 75%,#111 0) 0 0/12px 12px;border-radius:4px}
+.lane .racer{position:absolute;top:2px;width:62px;color:var(--signal);transition:left .5s cubic-bezier(.3,1.4,.6,1)}
+.track .meta{display:flex;justify-content:space-between;font-weight:800;font-size:14px;font-variant-numeric:tabular-nums;gap:8px;flex-wrap:wrap}
+.cars{display:grid;grid-template-columns:repeat(5,minmax(0,60px));gap:8px 10px;justify-content:center}
+.cars span{display:block;position:relative}
+.cars span.gone{opacity:.3}
+.cars span.gone::after{content:"✕";position:absolute;inset:0;display:grid;place-items:center;color:var(--bad);font-weight:800;font-size:26px}
+.sum{font-family:var(--display);font-size:44px;font-weight:800;color:var(--road);font-variant-numeric:tabular-nums}
+.groups{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;align-items:center}
+.grp{background:#fff;border-radius:16px;padding:10px;display:flex;flex-direction:column;gap:6px;align-items:center}
+.grp .cars{grid-template-columns:repeat(5,minmax(0,44px))}
+.seq{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.seq span{background:#fff;border-radius:14px;min-width:64px;padding:8px 12px;font-family:var(--display);font-size:38px;font-weight:800;color:var(--road)}
+.seq span.q{background:var(--lane)}
+.big-letter{font-family:var(--display);font-size:clamp(84px,20vw,130px);line-height:1;font-weight:800;color:var(--road);background:#fff;border-radius:24px;padding:10px 34px}
+.brand{font-family:var(--display);font-weight:800;font-size:clamp(34px,9vw,54px);color:var(--road)}
+.brand b{color:var(--signal)}
+.pic{font-size:84px;line-height:1}
+.opt.emo{font-size:56px;padding:8px 18px}
+.word{font-family:var(--display);font-size:56px;font-weight:800;letter-spacing:.06em;color:var(--road)}
+.word .gap{display:inline-block;min-width:44px;border-bottom:5px solid var(--signal);color:var(--signal)}
+.readme{font-family:var(--display);font-size:clamp(34px,8vw,52px);font-weight:800;color:var(--road);background:#fff;border-radius:18px;padding:8px 24px}
+
+/* Vibhavari */
+.vb-world .top h2{color:var(--thread)}
+.vb-world .tab.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.vb-world .lv.on{background:var(--plum);color:#fff;border-color:var(--plum)}
+.vb-world .stage{background:var(--kraft);outline:3px dashed rgba(59,47,42,.3);outline-offset:-10px}
+.vb-world .say{background:#fff;color:var(--thread)}
+.vb-world .say.mic{background:var(--felt);color:#fff}
+.vb-world .say.mic.live{background:var(--bad);animation:pulse 1s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 8px rgba(217,71,43,.2)}}
+.vb-world .next{background:var(--plum)}
+.craft{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:16px;align-items:center;background:#fff;border-radius:18px;padding:12px 16px;border:1px solid var(--line)}
+.craft .label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--muted)}
+.bracelet{display:flex;gap:5px;flex-wrap:wrap;align-items:center;position:relative;padding:6px 2px}
+.bracelet::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px solid var(--thread);opacity:.35}
+.bead{width:24px;height:24px;border-radius:50%;border:2px dashed #CDBFA8;background:var(--paper);position:relative}
+.bead.on{border:0;box-shadow:inset -4px -4px 0 rgba(0,0,0,.12)}
+.quilt{display:grid;grid-template-columns:repeat(6,18px);gap:3px}
+.quilt i{width:18px;height:18px;border-radius:3px;background:var(--paper);border:1px dashed #CDBFA8;display:block}
+.streak{font-family:var(--display);font-size:28px;font-weight:800;color:var(--plum);line-height:1;font-variant-numeric:tabular-nums}
+.topic{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--teal);background:#fff;border-radius:999px;padding:3px 12px}
+.bigsent{font-family:var(--display);font-size:clamp(24px,5vw,34px);font-weight:700;color:var(--thread);max-width:30ch;line-height:1.25;text-wrap:balance}
+.heard{display:flex;flex-direction:column;gap:6px;align-items:center;width:100%}
+.words{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:640px}
+.words span{border-radius:8px;padding:2px 8px;font-weight:800;font-size:17px}
+.words .hit{background:var(--okbg);color:#1E6B3B}
+.words .miss{background:#FCEBD7;color:#8A4A0C}
+.youSaid{font-size:14px;color:var(--muted);margin:0;max-width:60ch}
+.meter{width:min(320px,100%);height:12px;background:#fff;border-radius:999px;overflow:hidden}
+.meter i{display:block;height:100%;border-radius:999px;transition:width .4s}
+.meaning{font-size:18px;font-weight:700;max-width:46ch}
+.string{min-height:62px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;background:rgba(255,255,255,.6);border-radius:16px;padding:8px 12px;width:100%;max-width:680px}
+.tile{width:46px;height:46px;border-radius:50%;border:0;font-family:var(--display);font-size:23px;font-weight:800;color:#fff;box-shadow:inset -5px -5px 0 rgba(0,0,0,.15)}
+.tile.used,.wcard.used{visibility:hidden}
+.wcard{border:0;border-radius:12px;padding:8px 14px;background:#fff;font-weight:800;font-size:18px;box-shadow:0 2px 0 #CDBFA8}
+.sent{border:3px solid transparent;border-radius:14px;background:#fff;padding:12px 16px;font-size:18px;font-weight:700;text-align:left;width:100%;max-width:580px}
+.list{display:flex;flex-direction:column;gap:10px;width:100%;align-items:center}
+.correct-word{font-family:var(--display);font-size:30px;font-weight:800;letter-spacing:.04em}
+.timer{font-family:var(--display);font-size:64px;font-weight:800;color:var(--plum);font-variant-numeric:tabular-nums;line-height:1}
+.starters{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:620px}
+.starters span{background:#fff;border-radius:10px;padding:6px 12px;font-weight:800;color:var(--plum)}
+/* chat */
+.chat{display:flex;flex-direction:column;gap:10px;width:100%;max-width:620px;text-align:left}
+.bub{max-width:85%;border-radius:18px;padding:10px 14px;font-weight:700;font-size:17px}
+.bub small{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;opacity:.7;font-weight:800}
+.bub.them{background:#fff;align-self:flex-start;border-bottom-left-radius:4px}
+.bub.me{background:var(--teal);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.scenes{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.scenes button{border:2px solid var(--line);background:#fff;border-radius:12px;padding:6px 12px;font-weight:800;font-size:14px}
+.scenes button.on{border-color:var(--plum);color:var(--plum)}
+/* story */
+.story{background:#fff;border-radius:16px;padding:18px 20px;text-align:left;max-width:64ch;width:100%;display:flex;flex-direction:column;gap:10px;font-size:17px}
+.story p{margin:0}
+.story h3{font-size:26px}
+/* phrase book */
+.cat{width:100%;max-width:680px;background:#fff;border-radius:16px;text-align:left;overflow:hidden}
+.cat>button{width:100%;border:0;background:none;padding:14px 16px;font-family:var(--display);font-size:20px;font-weight:700;text-align:left;display:flex;justify-content:space-between;gap:8px}
+.cat ul{list-style:none;margin:0;padding:0 12px 12px;display:flex;flex-direction:column;gap:6px}
+.cat li{display:flex;flex-direction:column;gap:6px;background:var(--paper);border-radius:12px;padding:8px 12px}
+.cat .pr{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.cat .pr span{font-weight:700;font-size:17px;min-width:0}
+.cat .pr .btnrow{gap:6px}
+.cat .say{padding:6px 12px;font-size:14px}
+
+.party{position:fixed;inset:0;display:grid;place-items:center;background:rgba(35,35,43,.55);z-index:20;padding:20px}
+.party>div{background:#fff;border-radius:24px;padding:28px;max-width:360px;text-align:center;display:flex;flex-direction:column;gap:12px}
+.party h3{font-size:32px}
+@media (max-width:520px){
+  .stage{padding:18px 12px}
+  .cars{grid-template-columns:repeat(5,minmax(0,50px))}
+  .grp .cars{grid-template-columns:repeat(5,minmax(0,34px))}
+  .tile{width:40px;height:40px;font-size:20px}
+  .craft{grid-template-columns:1fr 1fr}
+  .craft>div:first-child{grid-column:1/-1}
+  .tab{font-size:14px;padding:7px 10px}
+}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+/* ===================== CONTENT ===================== */
+/* ---------- Agasthya ---------- */
+const BRANDS=['Audi','BMW','Chevrolet','Ford','Honda','Hyundai','Jeep','Kia','Lamborghini','Mahindra','Maruti','Nissan','Porsche','Renault','Skoda','Tata','Toyota','Volkswagen','Volvo','Ferrari','Bentley','Genesis','Mercedes','Rolls Royce','Jaguar','Land Rover','Citroen','Mini'];
+const PHON=[['a','apple','🍎'],['b','ball','⚽'],['c','cat','🐱'],['d','dog','🐶'],['e','egg','🥚'],['f','fish','🐟'],['g','goat','🐐'],['h','hat','🎩'],['i','insect','🐜'],['j','jeep','🚙'],['k','kite','🪁'],['l','lion','🦁'],['m','moon','🌙'],['n','nest','🪺'],['o','octopus','🐙'],['p','pen','🖊️'],['q','queen','👑'],['r','rabbit','🐰'],['s','sun','☀️'],['t','tiger','🐯'],['u','umbrella','☂️'],['v','van','🚐'],['w','watch','⌚'],['y','yo-yo','🪀'],['z','zebra','🦓']];
+const CVC=[['cat','🐱'],['bus','🚌'],['car','🚗'],['sun','☀️'],['pen','🖊️'],['cup','☕'],['hat','🎩'],['bat','🦇'],['dog','🐶'],['van','🚐'],['fan','🪭'],['box','📦'],['bed','🛏️'],['egg','🥚'],['fox','🦊'],['pig','🐷'],['net','🥅'],['map','🗺️'],['bag','🎒'],['hen','🐔'],['bug','🐛'],['jam','🍯'],['mug','🍺'],['log','🪵'],['pot','🍲'],['web','🕸️'],['six','6️⃣'],['ten','🔟'],['zip','🤐'],['red','🟥']];
+const SIGHT=['the','is','a','I','can','see','go','my','we','it','to','in','on','up','and','look','you','me','he','she','at','am','like','big','little','come','here','yes','no','this'];
+const READ_SENT=[['I see a car.','🚗'],['I see a bus.','🚌'],['The dog can run.','🐶'],['A cat is on the mat.','🐱'],['I can see the sun.','☀️'],['I like my ball.','⚽'],['The fish is in the water.','🐟'],['Look at the big jeep.','🚙'],['I have a pen.','🖊️'],['The cup is hot.','☕'],['I see a red fox.','🦊'],['The pig is pink.','🐷'],['My bag is new.','🎒'],['I see the moon.','🌙'],['The bird can fly.','🐦'],['I can eat an egg.','🥚'],['The van is here.','🚐'],['The lion is big.','🦁'],['I like the kite.','🪁'],['Look at the train.','🚆']];
+
+/* ---------- Vibhavari: sentences to speak (by level) ---------- */
+const SPEAK={
+1:[
+['Me and my family','My name is Vibhavari and I am eleven years old.'],
+['Me and my family','I study in class six.'],
+['Me and my family','I live in Bangalore with my family.'],
+['Me and my family','My little brother loves cars.'],
+['Me and my family','I like to make crafts in my free time.'],
+['Greetings','Good morning, how are you today?'],
+['Greetings','I am fine, thank you. How about you?'],
+['Greetings','Good night, see you tomorrow.'],
+['Greetings','Happy birthday! Have a wonderful day.'],
+['In class','May I come in, ma\'am?'],
+['In class','May I drink water, please?'],
+['In class','Excuse me, can you help me?'],
+['In class','I did not understand this question.'],
+['In class','Could you please explain it again?'],
+['In class','I have finished my homework.'],
+['In class','I forgot my notebook at home.'],
+['In class','Sorry, I am late today.'],
+['In class','Can I borrow your pencil, please?'],
+['In class','We have a maths test tomorrow.'],
+['In class','My teacher is very kind.'],
+['Manners','Thank you for helping me.'],
+['Manners','Please close the door.'],
+['Manners','Please wait for me, I am coming.'],
+['Manners','Please pass me the salt.'],
+['Food','I am hungry. What is for lunch?'],
+['Food','This food is very tasty.'],
+['Food','I would like some more rice, please.'],
+['Feelings','I am feeling tired today.'],
+['Feelings','I am very happy today.'],
+['Feelings','I am a little nervous about the test.'],
+['My day','I wake up at six in the morning.'],
+['My day','I brush my teeth and take a bath.'],
+['My day','I go to school by bus.'],
+['My day','I like to read story books.'],
+['My day','I am going to the park.'],
+['Questions','Where is my water bottle?'],
+['Questions','What time is it now?'],
+['Questions','Let us play together after school.'],
+['Weather','It is raining heavily outside.'],
+['Weather','It is very hot today.']
+],
+2:[
+['Past events','Yesterday I went to the market with my mother.'],
+['Past events','Last Sunday we visited my grandparents\' house.'],
+['Past events','I helped my brother with his homework today.'],
+['Past events','Our school trip to the zoo was a lot of fun.'],
+['Past events','It was the best day of my holidays.'],
+['Past events','I was reading a book when the lights went off.'],
+['Future plans','I am going to make a greeting card for my friend.'],
+['Future plans','Next week we will have our annual day function.'],
+['Future plans','If it rains tomorrow, we will stay at home.'],
+['Future plans','When I grow up, I want to become a designer.'],
+['Future plans','I am looking forward to the summer holidays.'],
+['Opinions','I think science is interesting because we do experiments.'],
+['Opinions','In my opinion, reading every day makes us smarter.'],
+['Opinions','I don\'t agree with you, but I respect your idea.'],
+['Opinions','We should save water and keep our city clean.'],
+['Requests','Could you tell me where the library is?'],
+['Requests','Would you like to join our craft club?'],
+['Requests','Can I share my idea with the class?'],
+['Requests','Can you show me how to do this?'],
+['Requests','Please speak slowly, I want to understand clearly.'],
+['Requests','I would like to have a glass of juice, please.'],
+['Requests','Please give me two minutes to finish this.'],
+['Requests','Shall we start the game now?'],
+['Feelings','I am sorry, I did not mean to hurt you.'],
+['Feelings','I am really proud of my project.'],
+['Feelings','I made a mistake, but I will try again.'],
+['Feelings','I feel confident when I practise every day.'],
+['Feelings','This is my first time speaking on the stage.'],
+['About me','My best friend and I sit together in class.'],
+['About me','I usually do my homework before dinner.'],
+['About me','I have been learning to draw for two years.'],
+['About me','My mother cooks the best dosa in the world.'],
+['About me','My father reads the newspaper every morning.'],
+['About me','She is taller than me, but I am faster.'],
+['Describing','We celebrate Diwali with lamps, sweets and new clothes.'],
+['Describing','First I cut the paper, then I fold it neatly.'],
+['Describing','I have never seen such a big elephant before.'],
+['Describing','Our teacher asked us to work in groups.'],
+['Questions','What do you like to do on weekends?'],
+['Stage','Thank you, everyone, for listening to me.']
+],
+3:[
+['Speech','Good morning to our principal, teachers and my dear friends.'],
+['Speech','Today I am going to talk about my favourite hobby, which is craft.'],
+['Speech','Craft helps me to be creative, patient and careful with my hands.'],
+['Speech','I would like to thank my parents for always supporting me.'],
+['Speech','In conclusion, small daily habits can make a big difference.'],
+['Speech','Thank you for giving me this chance to speak today.'],
+['Explaining','Let me explain my project step by step so that it is easy to understand.'],
+['Explaining','To begin with, we collected waste paper from our homes.'],
+['Explaining','After that, we cut it into strips and wove a colourful basket.'],
+['Explaining','Finally, we decorated the basket and gave it to our teacher.'],
+['Opinions','I believe that every child should learn to plant and care for trees.'],
+['Opinions','Not only is reading fun, but it also improves our vocabulary.'],
+['Opinions','On one hand phones are useful, but on the other hand they waste time.'],
+['Opinions','I completely agree with your point, and I would like to add one more idea.'],
+['Opinions','Instead of complaining, we should try to find a solution.'],
+['Opinions','It is important to listen carefully before we give our answer.'],
+['Imagine','If I were the class leader, I would make sure everyone is heard.'],
+['Imagine','In the future, I hope to design clothes that are good for the planet.'],
+['Imagine','If we work together as a team, we can finish this quickly.'],
+['Life lessons','The most important lesson I learned this year is never to give up.'],
+['Life lessons','I have learned that mistakes are a part of learning something new.'],
+['Life lessons','Although the test was difficult, I tried my best and stayed calm.'],
+['Life lessons','Whenever I feel nervous, I take a deep breath and speak slowly.'],
+['Storytelling','My grandmother told me a story that I will never forget.'],
+['Storytelling','Once upon a time, a clever crow lived near a small village.'],
+['Storytelling','Because the crow was thirsty, it dropped pebbles into the pot.'],
+['Storytelling','The moral of the story is that where there is a will, there is a way.'],
+['Storytelling','As soon as the bell rang, all the students rushed to the playground.'],
+['Storytelling','Even though it was raining, the whole family went for a long walk.'],
+['Describing','Our country is famous for its many languages, festivals and foods.'],
+['Describing','Bangalore is known as the Garden City because of its many parks.'],
+['Describing','What I like most about my school is the friendly teachers.'],
+['Smart replies','Could you please repeat the question? I want to make sure I understand it.'],
+['Smart replies','I am not sure about the answer, but let me try my best.'],
+['Smart replies','That is a good question, let me think for a moment.']
+]};
+
+/* ---------- Conversations ---------- */
+/* each turn: [speaker, line, [best, worse, worse], tip] */
+const SCENES={
+1:[
+{t:'Meeting a new classmate',who:'Riya',turns:[
+ ['Riya','Hi! I am Riya. I am new in this class.',['Hi Riya, I am Vibhavari. Welcome to our class!','Myself Vibhavari.','Okay.'],'Say your name with "I am…" and welcome her. "Myself…" is a common mistake.'],
+ ['Riya','Thank you! Which subject do you like?',['I like science because we do experiments.','Science.','I am liking science.'],'A full sentence with a reason ("because…") sounds friendly and confident.'],
+ ['Riya','Can you show me the library?',['Sure, come with me. It is on the first floor.','Yes, go.','No.'],'"Sure, come with me" is polite and helpful.']]},
+{t:'Morning with the teacher',who:'Teacher',turns:[
+ ['Teacher','Good morning, Vibhavari.',['Good morning, ma\'am. How are you?','Morning.','Good morning, ma\'am, how you are?'],'In questions, "are" comes before "you": How are you?'],
+ ['Teacher','I am fine. Did you bring your project?',['Yes, ma\'am. I have it in my bag.','I bringed it.','Yes, I brought it yesterday.'],'Answer the question that was asked, clearly. "Bringed" is not a word; the past is "brought".'],
+ ['Teacher','Very good. Please submit it after the prayer.',['Okay, ma\'am. Thank you.','Fine.','Okay, I am submitting.'],'"Okay, ma\'am. Thank you." is short and polite.']]},
+{t:'At the stationery shop',who:'Shopkeeper',turns:[
+ ['Shopkeeper','Hello, what would you like?',['I would like two notebooks and a glue stick, please.','Give notebook.','I want notebooks give.'],'"I would like…, please" is the polite way to ask in a shop.'],
+ ['Shopkeeper','That will be eighty rupees.',['Here you go, one hundred rupees.','Take.','Eighty rupees is here, take.'],'"Here you go" is a natural way to hand over money.'],
+ ['Shopkeeper','Here is your change, twenty rupees.',['Thank you. Have a nice day!','Ok bye.','Thanks you.'],'It is "thank you" or "thanks", never "thanks you".']]},
+{t:'Lunch break',who:'Friend',turns:[
+ ['Friend','What did you bring for lunch today?',['I brought lemon rice. Would you like to try some?','Lemon rice.','I am bringing lemon rice.'],'Offering to share makes conversation warm.'],
+ ['Friend','Yes, please! It smells very nice.',['Here, take some. My mother made it this morning.','Take.','My mother is making it.'],'Use the past "made" for something already done.'],
+ ['Friend','It is delicious. Thank you!',['You are welcome. I am glad you liked it.','Ok.','Yes.'],'"You are welcome" is the reply to "thank you".']]}
+],
+2:[
+{t:'Asking the teacher a doubt',who:'Teacher',turns:[
+ ['Teacher','Does anyone have a doubt?',['Yes, ma\'am. I did not understand the second step.','Doubt, ma\'am.','I am not understanding.'],'Say exactly which part you did not understand.'],
+ ['Teacher','Which part is confusing?',['How did we get twelve in the answer?','Twelve.','Why twelve came?'],'Questions start with a question word, then "did/do": How did we get…?'],
+ ['Teacher','We multiplied three by four. Is it clear now?',['Yes, ma\'am. Now I understand. Thank you!','Okay.','Yes, clear now I understood.'],'Thanking the teacher after a doubt is good manners.']]},
+{t:'Phone call to a friend',who:'Meera',turns:[
+ ['Meera','Hello? Who is speaking?',['Hi, this is Vibhavari. Is this Meera?','Me Vibhavari.','Tell who you are first.'],'On the phone we say "This is…", not "I am…" or "Me…".'],
+ ['Meera','Yes, hi! What happened?',['Do you know the English homework for tomorrow?','English homework what?','Homework tell.'],'Ask a full question so your friend knows what you need.'],
+ ['Meera','We have to write a paragraph on trees.',['Thank you so much! See you tomorrow.','Ok, cut.','Thanks, bye, cut the phone.'],'End calls politely: "See you tomorrow" or "Bye, take care".']]},
+{t:'Saying sorry',who:'Friend',turns:[
+ ['Friend','You broke my pencil box!',['I am really sorry. It was an accident.','Not my fault.','Sorry sorry, what to do?'],'A real apology: say sorry and explain calmly.'],
+ ['Friend','It was my favourite one.',['I understand. Can I help you fix it?','So what?','Buy a new one.'],'Show you understand their feelings, then offer help.'],
+ ['Friend','Okay, thank you for saying sorry.',['No problem. Are we still friends?','Hmm.','Okay, fine.'],'Ending kindly repairs the friendship.']]},
+{t:'Inviting a friend',who:'Friend',turns:[
+ ['Friend','What are you doing this Saturday?',['I am having a small craft party. Would you like to come?','Nothing.','Saturday I am doing party, come.'],'"Would you like to come?" is a polite invitation.'],
+ ['Friend','Sounds fun! What time?',['It starts at four in the evening, at my house.','Four.','At four o\'clock evening time.'],'Give the time and place together.'],
+ ['Friend','Great, I will be there!',['Wonderful! See you on Saturday.','Ok.','Come sure.'],'Show you are happy: "Wonderful!"']]},
+{t:'At the doctor',who:'Doctor',turns:[
+ ['Doctor','Hello, what is the problem?',['I have had a sore throat since yesterday.','Throat paining.','My throat is paining from yesterday.'],'Use "since" with a starting time, and "I have a sore throat", not "throat paining".'],
+ ['Doctor','Do you have a fever too?',['Yes, a little. I also feel very tired.','Yes fever.','Fever is there.'],'Add one more detail to help the doctor.'],
+ ['Doctor','Take this medicine twice a day and drink warm water.',['Okay, doctor. Thank you very much.','Ok.','Fine, I will do.'],'Repeat back or thank the doctor.']]}
+],
+3:[
+{t:'Presenting your project',who:'Teacher',turns:[
+ ['Teacher','Please tell us about your project.',['Sure. My project is about saving water at home.','Project is water.','My project, ma\'am, it is about water saving only.'],'Start with "Sure" and say your topic in one clear sentence.'],
+ ['Classmate','Why is saving water important?',['Because clean water is limited, and many people do not get enough of it.','Water is important.','Because of water.'],'Give a reason with facts, not just repeat the question.'],
+ ['Teacher','What can we do at school?',['We can close taps properly and reuse water for the plants.','Close taps.','Do something for water.'],'Give 2 clear actions.'],
+ ['Teacher','Excellent answer!',['Thank you, ma\'am. I really enjoyed working on it.','Ok.','Thanks.'],'Accept praise politely.']]},
+{t:'Group discussion',who:'Friend',turns:[
+ ['Friend','I think we should make a poster. What do you think?',['That is a good idea, but a model might be more interesting.','No poster.','Poster is bad.'],'Agree first, then give your idea politely with "but".'],
+ ['Friend','Why a model?',['Because people can see and touch it, so they remember it better.','Model is nice.','I like.'],'Use "because" and "so" to join your reasons.'],
+ ['Friend','Okay, let us do both!',['Great! Let us divide the work so we finish on time.','Ok, do.','Fine, you do it.'],'Suggest a next step. Leaders plan.']]},
+{t:'Class monitor interview',who:'Teacher',turns:[
+ ['Teacher','Why do you want to be the class monitor?',['I want to help my classmates and keep our class organised.','Because I want.','I am the best.'],'Talk about helping others, not just yourself.'],
+ ['Teacher','What will you do if two friends fight?',['I will listen to both of them calmly and help them make peace.','Tell teacher.','I will fight also.'],'Show you can solve problems calmly.'],
+ ['Teacher','Thank you, Vibhavari.',['Thank you for the chance, ma\'am.','Ok.','Bye.'],'Always end an interview with thanks.']]},
+{t:'Asking for directions',who:'Guard',turns:[
+ ['Guard','Can I help you?',['Yes, please. Could you tell me where the science section is?','Science where?','Where science is?'],'"Could you tell me where … is?" is very polite.'],
+ ['Guard','Go straight and take the second left.',['Thank you. Is it far from here?','Ok.','Second left, ok, go.'],'Ask a follow-up question if you need more information.'],
+ ['Guard','No, just two minutes\' walk.',['Great, thank you for your help!','Ok.','Thanks, bye.'],'Thank people who help you.']]},
+{t:'Disagreeing politely',who:'Friend',turns:[
+ ['Friend','Phones are the best thing for children.',['I see your point, but too much phone time can hurt our eyes.','You are wrong.','No, phones bad.'],'"I see your point, but…" disagrees without being rude.'],
+ ['Friend','But we can learn so much on phones!',['That is true. Maybe one hour a day is a good balance.','No.','Learning is in books only.'],'Find the middle path. That shows maturity.'],
+ ['Friend','Yes, I agree with that.',['Great, I am happy we agree.','Ok.','See, I told.'],'End a discussion on a friendly note.']]}
+]};
+
+/* ---------- Grammar fixes: [correct, wrong, wrong], why ---------- */
+const GRAMMAR={
+1:[
+ [['He doesn\'t know the answer.','He don\'t know the answer.','He not know the answer.'],'With he, she or it we use "doesn\'t", not "don\'t".'],
+ [['I have two brothers.','I am having two brothers.','I having two brothers.'],'For things you own or family, say "I have", not "I am having".'],
+ [['My name is Vibhavari.','Myself Vibhavari.','Me Vibhavari name.'],'Say "My name is…" or "I am…". "Myself…" is a common mistake.'],
+ [['Where are you going?','Where you are going?','Where you going?'],'In a question, "are" comes before "you".'],
+ [['I didn\'t go to the park.','I didn\'t went to the park.','I not went to the park.'],'After "didn\'t" use the base word: go, eat, play.'],
+ [['She is taller than me.','She is more taller than me.','She is tallest than me.'],'Use "taller" alone. "More taller" uses two comparing words.'],
+ [['I went there yesterday.','I have gone there yesterday.','I go there yesterday.'],'With "yesterday" use the simple past: "went".'],
+ [['Each of the girls has a pencil.','Each of the girls have a pencil.','Each of the girl have a pencil.'],'"Each" means one at a time, so it takes "has".'],
+ [['I am good at drawing.','I am good in drawing.','I good at drawing.'],'We say "good at" a skill.'],
+ [['Can I borrow your eraser?','Can I lend your eraser?','Can I borrow to your eraser?'],'You "borrow" from someone. They "lend" to you.'],
+ [['There are many books on the table.','There is many books on the table.','There many books on the table.'],'For more than one thing, use "there are".'],
+ [['She sings very well.','She sings very good.','She very well sings.'],'"Well" tells how someone does something.'],
+ [['My throat is sore.','My throat is paining.','My throat paining.'],'Say "My throat is sore" or "My throat hurts". "Paining" is not used this way.'],
+ [['I understand now.','I am understanding now.','I understanding now.'],'"Understand", "know" and "like" are not used with -ing here.'],
+ [['Thank you very much.','Thanks you very much.','Thank you so very much much.'],'It is "thank you" or "thanks", never "thanks you".']
+],
+2:[
+ [['I saw an elephant at the zoo.','I saw a elephant at the zoo.','I saw elephant at the zoo.'],'Use "an" before a vowel sound (a, e, i, o, u).'],
+ [['I am waiting for the bus.','I am waiting the bus.','I waiting for the bus.'],'We "wait for" something.'],
+ [['We reached school at eight o\'clock.','We reached to school at eight o\'clock.','We reached at school eight o\'clock.'],'"Reach" does not need "to".'],
+ [['He has been ill since Monday.','He is ill from Monday.','He has been ill from Monday.'],'Use "since" with a starting point in time.'],
+ [['I will tell you when I reach home.','I will tell you when I will reach home.','I tell you when I reached home.'],'After "when" about the future, use the present: "when I reach".'],
+ [['We discussed the problem.','We discussed about the problem.','We discuss about the problem yesterday.'],'"Discuss" does not need "about".'],
+ [['She speaks English fluently.','She speaks fluently English.','She speak English fluently.'],'Put the object (English) right after the verb.'],
+ [['My father is an engineer.','My father is engineer.','My father is a engineer.'],'Jobs need "a" or "an": an engineer, a doctor.'],
+ [['I have lived here for five years.','I am living here since five years.','I live here from five years.'],'For a length of time, use "for" with "have lived".'],
+ [['Please explain the answer to me.','Please explain me the answer.','Please explain me about the answer.'],'We explain something to someone.'],
+ [['I am looking forward to meeting you.','I am looking forward to meet you.','I look forward for meeting you.'],'"Looking forward to" is followed by an -ing word.'],
+ [['She has finished her work.','She has finish her work.','She have finished her work.'],'"She has" + past form (finished).'],
+ [['We go to school on Monday.','We go to school in Monday.','We go to school at Monday.'],'Use "on" with days: on Monday.'],
+ [['I was born in 2015.','I was born on 2015.','I born in 2015.'],'Use "in" with years and months. And say "I was born".'],
+ [['The book is on the table.','The book is in the table.','The book is at on the table.'],'"On" means on top of a surface.']
+],
+3:[
+ [['If I were a bird, I would fly to the mountains.','If I was a bird, I will fly to the mountains.','If I am a bird, I would fly to the mountains.'],'For imaginary situations: "If I were…, I would…".'],
+ [['She said that she was tired.','She said that she is tired yesterday.','She told that she was tired.'],'In reported speech "is" often becomes "was". Use "said that" or "told me that".'],
+ [['Although it was raining, we went out.','Although it was raining, but we went out.','Although raining, but we went out.'],'Do not use "although" and "but" together.'],
+ [['One of my friends is a dancer.','One of my friend is a dancer.','One of my friends are a dancer.'],'"One of" + plural noun + "is".'],
+ [['The furniture in our house is new.','The furnitures in our house are new.','The furniture in our house are new.'],'"Furniture" has no plural and takes "is".'],
+ [['Neither of them was late.','Neither of them were late.','Neither of them are late.'],'"Neither" means not one and not the other, so it takes "was".'],
+ [['I prefer tea to coffee.','I prefer tea than coffee.','I prefer tea more than coffee.'],'"Prefer" goes with "to", not "than".'],
+ [['He is one of the best players in the team.','He is one of the best player in the team.','He is one of best player in team.'],'"One of the best" + plural noun.'],
+ [['The news is very good today.','The news are very good today.','The newses are very good today.'],'"News" is always singular.'],
+ [['Let us go to the park.','Let us to go to the park.','Let us going to the park.'],'After "let us", use the base verb, without "to".'],
+ [['By the time we arrived, the movie had started.','By the time we arrived, the movie has started.','By the time we arrive, the movie started already.'],'For the earlier of two past actions, use "had" + past form.'],
+ [['I am used to waking up early.','I am used to wake up early.','I use to waking up early.'],'"Used to" (meaning familiar with) is followed by an -ing word.'],
+ [['Not only did she sing, but she also danced.','Not only she sang, but also she danced.','Not only she sing, but she dance also.'],'After "Not only" at the start, put "did" before the subject.'],
+ [['The book which I bought is interesting.','The book which I bought it is interesting.','The book I bought which is interesting.'],'Do not repeat "it" after "which".'],
+ [['Unless you study, you will not pass.','Unless you do not study, you will not pass.','Unless you study, you will pass not.'],'"Unless" already means "if not", so do not add another "not".']
+]};
+
+/* ---------- Word power: [word, meaning, sentence with ___] ---------- */
+const WORDS={
+1:[['brave','not afraid','The ___ girl saved the kitten from the tree.'],['polite','speaks kindly with good manners','Always be ___ and say please and thank you.'],['delicious','tastes very good','Amma\'s payasam is ___.'],['curious','wants to know more','The ___ child asked many questions.'],['borrow','take something and give it back later','Can I ___ your eraser?'],['tidy','clean and neat','Keep your room ___.'],['noisy','making a lot of sound','The classroom was ___ before the teacher came.'],['careful','paying attention to stay safe','Be ___ while using scissors.'],['share','give part of what you have to others','Please ___ your crayons with your friend.'],['honest','always tells the truth','An ___ person never lies.'],['invite','ask someone to come','I will ___ my friends to my birthday party.'],['exciting','makes you happy and eager','The cricket match was very ___.'],['gentle','soft and kind','Be ___ with the small puppy.'],['quickly','fast','She ran ___ to catch the bus.'],['proud','happy about something good you did','I felt ___ when I won the prize.'],['lazy','not wanting to work','Don\'t be ___, finish your homework.'],['remember','keep in your mind','Please ___ to bring your water bottle.'],['celebrate','enjoy a special day','We ___ Diwali with lights and sweets.'],['enormous','very, very big','The elephant was ___.'],['whisper','speak very softly','Please ___ in the library.']],
+2:[['confident','sure of yourself','Practise daily and you will feel ___ on stage.'],['explain','make something clear','Can you ___ this sum to me?'],['improve','become better','Reading every day will ___ your English.'],['discuss','talk about something together','Let us ___ the project in our group.'],['creative','good at making new things and ideas','She is very ___ and makes beautiful crafts.'],['patient','able to wait calmly','Be ___; the paint takes time to dry.'],['decide','choose after thinking','I can\'t ___ which colour to use.'],['describe','say what something is like','___ your best friend in five sentences.'],['nervous','a little worried or scared','I felt ___ before my speech.'],['achieve','reach a goal by hard work','You can ___ anything if you practise.'],['suggest','give an idea','Can I ___ a better way to do this?'],['responsible','trusted to do your duty','The monitor is ___ for keeping order.'],['grateful','thankful','I am ___ to my teachers for their help.'],['fluent','speaks easily and smoothly','She is ___ in English because she reads a lot.'],['compare','see how things are the same or different','___ the two pictures and find five differences.'],['prepare','get ready','We must ___ for the exam early.'],['recycle','use old things again in a new way','We ___ newspaper to make paper bags.'],['cooperate','work together','Team members should ___ with each other.'],['introduce','tell people who someone is','Let me ___ my new friend to you.'],['encourage','give someone courage and hope','My parents always ___ me to try new things.']],
+3:[['perspective','a way of seeing something','Try to see the problem from your friend\'s ___.'],['persuade','make someone agree with you','She tried to ___ her parents to buy a puppy.'],['determined','will not give up','He was ___ to win the race.'],['essential','very important; must have','Water is ___ for life.'],['eventually','in the end, after some time','After many tries, she ___ solved the puzzle.'],['reluctant','not wanting to do something','He was ___ to speak, but he did it.'],['appreciate','value and feel thankful for','I ___ your help with my project.'],['consequence','the result of an action','Missing class had a bad ___.'],['elaborate','explain with more details','Can you ___ on your idea?'],['resilient','able to bounce back after difficulty','A ___ person keeps going after failing.'],['sustainable','can continue without harming nature','Cloth bags are a ___ choice.'],['contribute','give your part','Everyone should ___ to keep the school clean.'],['hesitate','stop because you are unsure','Don\'t ___ to ask questions in class.'],['remarkable','unusual and impressive','Her craft work at the exhibition was ___.'],['initiative','doing something good without being told','She took the ___ to clean the classroom.'],['articulate','able to express ideas clearly','Practising speeches makes you more ___.'],['inspire','fill someone with the wish to do something','Great stories ___ us to be brave.'],['summarise','tell the main points briefly','Please ___ the chapter in five lines.'],['convince','make someone believe something','Use good reasons to ___ the audience.'],['gratitude','the feeling of being thankful','She wrote a card to show her ___.']]};
+
+/* ---------- Spelling: [word, meaning, parts] ---------- */
+const SPELL={
+1:[['friend','a person you like and trust','fri-end'],['because','for the reason that','be-cause'],['answer','the reply to a question','an-swer'],['colour','red, blue and green are each one','co-lour'],['island','land with water all around it','is-land'],['science','the subject about how nature works','sci-ence'],['library','a place full of books to borrow','li-bra-ry'],['address','where a person lives','ad-dress'],['Wednesday','the day after Tuesday','Wed-nes-day'],['February','the second month of the year','Feb-ru-a-ry'],['tomorrow','the day after today','to-mor-row'],['different','not the same','dif-fer-ent'],['beautiful','very pretty','beau-ti-ful'],['believe','to think something is true','be-lie-ve'],['favourite','the one you like the most','fa-vou-rite'],['sentence','words that make full sense together','sen-ten-ce'],['vegetable','a plant we eat, like a carrot','ve-ge-ta-ble'],['surprise','something you did not expect','sur-prise'],['neighbour','a person who lives next to you','neigh-bour'],['scissors','a tool with two blades for cutting','scis-sors']],
+2:[['necessary','needed; must have','ne-ces-sa-ry'],['environment','the air, water and land around us','en-vi-ron-ment'],['government','the people who run a country','go-vern-ment'],['separate','to keep things apart','se-pa-rate'],['receive','to get something given to you','re-cei-ve'],['knowledge','what you know and have learned','know-ledge'],['interesting','makes you want to know more','in-ter-est-ing'],['temperature','how hot or cold something is','tem-pe-ra-ture'],['experiment','a test done in science','ex-pe-ri-ment'],['paragraph','a group of sentences about one idea','pa-ra-graph'],['calendar','a chart of days and months','ca-len-dar'],['probably','most likely','pro-ba-bly'],['beginning','the start of something','be-gin-ning'],['disappear','to go out of sight','dis-ap-pear'],['immediately','right now, at once','im-me-di-ate-ly'],['grammar','the rules of a language','gram-mar'],['achievement','something good you did with effort','a-chieve-ment'],['opportunity','a good chance to do something','op-por-tu-ni-ty'],['restaurant','a place where you buy and eat meals','res-tau-rant'],['independent','not needing help from others','in-de-pen-dent']],
+3:[['accommodation','a place to stay','ac-com-mo-da-tion'],['embarrass','to make someone feel shy or silly','em-bar-rass'],['occasion','a special event','oc-ca-sion'],['definitely','surely, without doubt','de-fi-nite-ly'],['rhythm','a regular beat in music','rhy-thm'],['business','buying and selling work','bu-si-ness'],['committee','a group chosen to plan something','com-mit-tee'],['conscious','awake and aware','con-scious'],['guarantee','a promise that something will happen','gua-ran-tee'],['occurrence','something that happens','oc-cur-rence'],['parliament','the group that makes a country\'s laws','par-lia-ment'],['pronunciation','how a word is said','pro-nun-ci-a-tion'],['recommend','to suggest something good','re-com-mend'],['conscience','the inner voice telling right from wrong','con-science'],['privilege','a special right or advantage','pri-vi-lege'],['mischievous','playfully naughty','mis-chie-vous'],['exaggerate','to make something sound bigger than it is','ex-ag-ge-rate'],['questionnaire','a list of questions for a survey','ques-tion-naire'],['millennium','a thousand years','mil-len-ni-um'],['maintenance','keeping something in good condition','main-te-nance']]};
+
+/* ---------- Stories: title, text[], words[], questions [q, [right, wrong, wrong], why] ---------- */
+const STORIES={
+1:[
+{t:'The Lost Water Bottle',text:['Meera had a blue water bottle with yellow stars on it. She took it to school every day.','One afternoon, after the games period, she could not find it. She looked under her desk and in her bag, but it was not there.','Meera felt sad. Her friend Vibhavari said, "Don\'t worry. Let us look on the playground."','The two girls walked to the playground. Near the big tree, they saw something blue shining in the sun.','It was Meera\'s bottle! Meera smiled and said, "Thank you so much for helping me."','Vibhavari said, "That is what friends are for."'],
+ words:['playground','shining','period'],
+ qs:[['What colour was Meera\'s bottle?',['Blue with yellow stars','Red with white dots','Green'],'The first line says it was blue with yellow stars.'],['Where did they find the bottle?',['Near the big tree','In the classroom','In the bus'],'They saw it near the big tree on the playground.'],['What does "That is what friends are for" mean?',['Friends help each other','Friends lose things','Friends play games'],'It means helping is what good friends do.']]},
+{t:'The Little Car Expert',text:['Vibhavari\'s little brother loves cars. He can name every car on the road.','One evening, the family went for a walk. "Look, a Tata!" he shouted. "And that is a Hyundai!"','An uncle sitting on a bench was surprised. "How do you know so many cars?" he asked.','"I look at the logo and the shape," said the little boy proudly.','Vibhavari smiled. She thought, "If he can learn all the car names, he can learn his letters too."','That night, she made letter cards with car names on them. A for Audi, B for BMW, T for Tata. Her brother loved them!'],
+ words:['proudly','logo','surprised'],
+ qs:[['What does the little brother love?',['Cars','Books','Dolls'],'The story says he loves cars and can name every car.'],['How does he know the cars?',['He looks at the logo and the shape','He reads the number plate','He asks his father'],'He says, "I look at the logo and the shape."'],['What did Vibhavari make for him?',['Letter cards with car names','A paper car','A cake'],'She made letter cards like A for Audi, B for BMW.']]}
+],
+2:[
+{t:'The Paper Boat Race',text:['It had rained all night, and the lane outside the house was full of flowing water.','Vibhavari and her friends decided to have a paper boat race. Each child made a boat from old newspaper.','Rahul made a big boat, but it was heavy and soon became soggy. Priya\'s boat turned over in the first minute.','Vibhavari folded her boat carefully and rubbed a candle on the bottom so that water would not soak in.','Her boat sailed smoothly past all the others and reached the drain first. Everyone cheered.','"How did you do it?" asked Rahul. Vibhavari explained her candle trick, and the next day, everyone\'s boats were faster.'],
+ words:['soggy','smoothly','cheered'],
+ qs:[['Why did Rahul\'s boat sink?',['It was big and heavy and became soggy','It hit a stone','A dog took it'],'The story says it was heavy and became soggy.'],['What was Vibhavari\'s trick?',['She rubbed a candle on the bottom','She used plastic','She used glue'],'Candle wax stops water from soaking into paper.'],['What does this story teach?',['Careful work and sharing ideas help everyone','Always win alone','Rain is bad'],'She worked carefully and shared her trick, so everyone improved.']]},
+{t:'The Clever Crow',text:['On a very hot summer day, a crow was flying in search of water. His throat was dry, and he felt weak.','At last, he saw a pot in a garden. He flew down quickly, but there was only a little water at the bottom.','His beak could not reach it. The crow did not give up. He looked around and saw some small pebbles.','He picked up one pebble and dropped it into the pot. Then another, and another.','Slowly, the water rose higher and higher. Finally, the crow could drink.','He drank happily and flew away. He had solved his problem by thinking, not by crying.'],
+ words:['pebbles','search','solved'],
+ qs:[['What was the crow\'s problem?',['He could not reach the water','He was lost','He was cold'],'The water was at the bottom and his beak could not reach.'],['What did he use to raise the water?',['Pebbles','Leaves','Sticks'],'He dropped small pebbles into the pot.'],['What is the lesson?',['Think calmly to solve problems','Fly fast','Always ask for help'],'He solved it by thinking, not crying.']]}
+],
+3:[
+{t:'The Girl Who Was Afraid to Speak',text:['Ananya was the best artist in her class, but she was terribly afraid of speaking in front of people.','When the teacher announced a speech competition, Ananya\'s hands began to shake. She wanted to hide under her desk.','That evening, her mother gave her a simple idea. "Practise your speech in front of the mirror for five minutes every day. Then practise in front of us."','At first, Ananya forgot her words and laughed nervously. But every day, she became a little more confident.','On the day of the competition, she took a deep breath, looked at the friendly faces in the front row, and began to speak slowly and clearly.','She did not win first prize, but she won something more important. She discovered that courage grows with practice.'],
+ words:['terribly','announced','discovered','courage'],
+ qs:[['What was Ananya good at?',['Art','Running','Singing'],'The first line says she was the best artist.'],['What did her mother suggest?',['Practise in front of a mirror every day','Skip the competition','Read the speech fast'],'Daily practice in front of a mirror, then the family.'],['What does "courage grows with practice" mean?',['The more you practise, the braver you become','Courage comes only once','Prizes give courage'],'Doing something many times makes us less afraid.']]},
+{t:'The Plastic-Free Market',text:['Every Sunday, Vibhavari went to the vegetable market with her grandfather.','She noticed that almost every shopkeeper gave vegetables in thin plastic bags, which often ended up in drains and lakes.','She decided to take the initiative. With her craft skills, she stitched ten colourful cloth bags from old sarees.','The next Sunday, she gave them to the shopkeepers and explained, "Plastic takes hundreds of years to break down. Cloth bags can be used again and again."','Some shopkeepers were reluctant at first, but the customers loved the bright bags. Soon, more people started bringing their own.','A month later, a local newspaper wrote a small story about the girl who made the market greener.'],
+ words:['initiative','reluctant','customers','stitched'],
+ qs:[['What did Vibhavari use to make the bags?',['Old sarees','New plastic','Newspaper'],'She stitched cloth bags from old sarees.'],['Why are cloth bags better?',['They can be used again and do not pollute','They are cheaper always','They are heavier'],'Plastic takes hundreds of years to break down.'],['What does "reluctant" mean here?',['Not willing at first','Very happy','Angry and loud'],'Some shopkeepers did not want to change at first.']]}
+]};
+
+/* ---------- Phrase book ---------- */
+const PHRASES=[
+['Introducing yourself',['Hello, my name is Vibhavari.','I am in class six at my school.','Nice to meet you.','I am interested in craft and drawing.','This is my friend Meera.','Where are you from?','What do you like to do in your free time?']],
+['Talking to teachers',['Good morning, ma\'am. May I come in?','Excuse me, ma\'am. I have a doubt.','Could you please explain that again?','I am sorry, I forgot my book. I will bring it tomorrow.','May I go to the washroom, please?','Thank you for your help, ma\'am.','I have completed the work. Shall I show it to you?']],
+['Asking for help',['Can you help me with this, please?','I am stuck. What should I do next?','Could you show me how to do it?','Do you know where I can find it?','I need some help with my project.','Would you mind helping me for a minute?']],
+['Sorry and thank you',['I am really sorry. It was my mistake.','I did not mean to do that.','It will not happen again.','Thank you so much for your help.','I really appreciate it.','That is very kind of you.','No problem. You are welcome.']],
+['Agreeing and disagreeing',['I agree with you.','That is a good point.','I see what you mean, but…','I am not sure I agree.','I have a different opinion.','Maybe we can find a middle way.','You are right about that.']],
+['Giving your opinion',['I think that…','In my opinion…','I believe that…','I feel that…','The reason is that…','For example…','That is why I think…']],
+['Telling a story',['Once upon a time…','One day…','First…','Then…','After that…','Suddenly…','Finally…','In the end, everyone was happy.']],
+['When you are nervous',['Give me a moment to think.','Let me try to answer.','Could you repeat the question, please?','I am not sure, but I think…','Sorry, let me say that again.','That is an interesting question.']],
+['On the stage',['Good morning to everyone present here.','Today I am going to speak about…','First, let me tell you…','I would like to thank my teachers.','In conclusion…','Thank you for listening.']]
+];
+
+/* ---------- 1-minute talks ---------- */
+const TALKS={
+1:[['Introduce yourself.',['My name is…','I am … years old.','I like…','My family…']],['Tell about your favourite food.',['My favourite food is…','It tastes…','My mother makes it…']],['Describe your school bag.',['My bag is … colour.','Inside it there is…','I keep my…']],['Tell about your best friend.',['My best friend is…','We like to…','She is…']],['What do you do after school?',['After school, I…','Then I…','Before dinner, I…']]],
+2:[['Tell about last Sunday.',['Last Sunday, I…','In the morning…','In the evening…','It was…']],['Explain how to make a paper boat.',['First…','Then…','After that…','Finally…']],['Describe your favourite festival.',['My favourite festival is…','We celebrate it by…','I like it because…']],['What do you want to be when you grow up?',['I want to become…','because…','To do this, I will…']],['Tell about a time you helped someone.',['One day…','I saw that…','So I…','I felt…']]],
+3:[['Should children have mobile phones? Give your opinion.',['In my opinion…','Firstly…','On the other hand…','In conclusion…']],['If you were the principal for a day, what would you change?',['If I were the principal…','I would…','This would help because…']],['Tell a story with a lesson.',['Once upon a time…','Suddenly…','In the end…','The moral is…']],['How can we keep our city clean?',['I believe…','We can…','Also…','If everyone…']],['Talk about a person who inspires you.',['A person who inspires me is…','This is because…','I have learned…']]]
+};
+
+/* ===================== HELPERS ===================== */
+const $=(s,el=document)=>el.querySelector(s);
+const $$=(s,el=document)=>[...el.querySelectorAll(s)];
+const rand=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const CAR=(c='currentColor')=>`<svg viewBox="0 0 64 32" aria-hidden="true"><path d="M4 22v-5c0-2 1-3 3-3.5l9-1.6 7-6.2c1-.9 2.4-1.4 3.8-1.4h12.4c1.5 0 2.9.6 3.9 1.7l6 6 6.6 1.2c2 .4 3.3 1.6 3.3 3.6v5.2c0 .9-.7 1.5-1.5 1.5H55a6 6 0 0 0-12 0H22a6 6 0 0 0-12 0H5.5C4.7 23.5 4 22.9 4 22z" fill="${c}"/><path d="M25 8.6h7.5v4.9H19.6zM35.5 8.6h5.8l4.8 4.9H35.5z" fill="#DCEFF7"/><circle cx="16" cy="24" r="4.6" fill="#23232B"/><circle cx="49" cy="24" r="4.6" fill="#23232B"/><circle cx="16" cy="24" r="1.8" fill="#C9C9CF"/><circle cx="49" cy="24" r="1.8" fill="#C9C9CF"/></svg>`;
+const CAR_COLORS=['#E8432E','#2A6FDB','#F6C431','#2F9E58','#8E44AD','#F08A24','#14A3A3','#D6336C'];
+const FELT=['#E86A8E','#2A9D8F','#F4A259','#6D4C8D','#3D8BD9','#E9C46A','#C0504D','#7BB662'];
+
+/* ===================== VOICE (speak + listen) ===================== */
+let VOICE=null;
+function pickVoice(){try{const v=speechSynthesis.getVoices();VOICE=v.find(x=>/en[-_]IN/i.test(x.lang))||v.find(x=>/en[-_]GB/i.test(x.lang))||v.find(x=>/^en/i.test(x.lang))||null}catch(e){}}
+try{pickVoice();speechSynthesis.onvoiceschanged=pickVoice}catch(e){}
+function speak(text,rate=.9){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);if(VOICE)u.voice=VOICE;u.lang=VOICE?VOICE.lang:'en-IN';u.rate=rate;speechSynthesis.speak(u)}catch(e){}}
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+
+const CONTR={"i'm":"i am","don't":"do not","doesn't":"does not","didn't":"did not","can't":"can not","cannot":"can not","won't":"will not","it's":"it is","let's":"let us","i'll":"i will","that's":"that is","what's":"what is","isn't":"is not","aren't":"are not","you're":"you are","we're":"we are","i've":"i have","wasn't":"was not","couldn't":"could not","there's":"there is","he's":"he is","she's":"she is","we'll":"we will","you'll":"you will"};
+const NUMS={'0':'zero','1':'one','2':'two','3':'three','4':'four','5':'five','6':'six','7':'seven','8':'eight','9':'nine','10':'ten','11':'eleven','12':'twelve','20':'twenty','80':'eighty','100':'one hundred'};
+const FREE=new Set(['vibhavari','agasthya','riya','meera','rahul','priya','ananya','maam','dosa','payasam','diwali','bangalore']);
+function norm(t){
+  t=t.toLowerCase().replace(/[’‘]/g,"'").replace(/ma'am|madam|mam\b/g,'maam');
+  t=t.replace(/[^a-z0-9' ]+/g,' ');
+  return t.split(/\s+/).filter(Boolean).flatMap(w=>{w=w.replace(/^'+|'+$/g,'');if(CONTR[w])return CONTR[w].split(' ');if(NUMS[w])return NUMS[w].split(' ');return [w.replace(/'s$/,'').replace(/'/g,'')]}).filter(Boolean);
+}
+function scoreSpeech(target,heard){
+  const T=norm(target),H=norm(heard),pool=[...H];
+  const marks=T.map(w=>{if(FREE.has(w))return true;const i=pool.indexOf(w);if(i>=0){pool.splice(i,1);return true}return false});
+  return{score:marks.filter(Boolean).length/Math.max(1,T.length),marks};
+}
+/* A reusable practise block: Listen / Slow / Say it, with a word-by-word result. onPass called once when score >= .7 */
+function micBlock(text,onPass){
+  const el=document.createElement('div');el.className='heard';
+  el.innerHTML=`<div class="btnrow"><button class="say" data-a="n">🔊 Listen</button><button class="say" data-a="s">🐢 Slow</button><button class="say mic" data-a="m">🎤 Say it</button></div><div class="res heard"></div>`;
+  const res=$('.res',el);let passed=false,rec=null;
+  const pass=()=>{if(!passed){passed=true;onPass&&onPass()}};
+  $('[data-a=n]',el).onclick=()=>speak(text);
+  $('[data-a=s]',el).onclick=()=>speak(text,.6);
+  const mic=$('[data-a=m]',el);
+  mic.onclick=()=>{
+    if(!SR){res.innerHTML=`<p class="hint">This browser cannot listen. Read the sentence aloud clearly, then tap below.</p><button class="next" style="background:var(--teal)">I said it aloud</button>`;
+      $('button',res).onclick=()=>{res.innerHTML='<div class="feedback ok">Well done! Say it once more, a little faster.</div>';pass()};return}
+    if(rec){try{rec.stop()}catch(e){}return}
+    try{speechSynthesis.cancel()}catch(e){}
+    rec=new SR();rec.lang='en-IN';rec.interimResults=false;rec.maxAlternatives=4;
+    mic.classList.add('live');mic.textContent='● Listening… tap to stop';res.innerHTML='<p class="hint">Speak now, clearly and not too fast.</p>';
+    let got=false;
+    rec.onresult=e=>{got=true;const alts=[...e.results[0]].map(a=>a.transcript);let best={score:-1};
+      alts.forEach(a=>{const s=scoreSpeech(text,a);if(s.score>best.score)best={...s,said:a}});
+      const p=Math.round(best.score*100),words=text.split(/\s+/);
+      const cls=p>=85?'ok':p>=60?'mid':'no',msg=p>=85?'Excellent! Clear and correct.':p>=60?'Good! Practise the orange words and try again.':'Try again. Listen once, then say it slowly.';
+      res.innerHTML=`<div class="meter"><i style="width:${p}%;background:var(--${cls==='ok'?'ok':cls==='mid'?'warn':'bad'})"></i></div><div class="feedback ${cls}">${p}% · ${msg}</div>
+        <div class="words">${words.map((w,i)=>`<span class="${best.marks[i]?'hit':'miss'}">${esc(w)}</span>`).join('')}</div><p class="youSaid">I heard: “${esc(best.said)}”</p>`;
+      if(best.score>=.7)pass();};
+    rec.onerror=e=>{if(e.error==='not-allowed'||e.error==='service-not-allowed')res.innerHTML='<p class="hint">The microphone is blocked. Allow microphone for this site in your browser settings, then try again.</p>';
+      else if(e.error==='no-speech')res.innerHTML='<p class="hint">I did not hear anything. Tap Say it and speak a little louder.</p>';};
+    rec.onend=()=>{rec=null;mic.classList.remove('live');mic.textContent='🎤 Say it';if(!got&&res.innerHTML.includes('Speak now'))res.innerHTML='<p class="hint">I did not hear anything. Tap Say it and try again.</p>'};
+    try{rec.start()}catch(e){rec=null;mic.classList.remove('live');mic.textContent='🎤 Say it'}
+  };
+  return el;
+}
+
+/* ===================== SAVED PROGRESS (this browser only) ===================== */
+const KEY='learning-corner-v2';
+const today=new Date().toLocaleDateString('en-CA');
+const yday=(()=>{const d=new Date();d.setDate(d.getDate()-1);return d.toLocaleDateString('en-CA')})();
+function fresh(){return{ag:{pos:0,stars:0,level:1,last:'',streak:0},vb:{beads:0,patches:0,level:1,missed:[],last:'',streak:0,spoken:0},day:today,t:{ag:0,vb:0}}}
+let S;try{S=Object.assign(fresh(),JSON.parse(localStorage.getItem(KEY))||{})}catch(e){S=fresh()}
+if(S.day!==today){S.day=today;S.t={ag:0,vb:0}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function streakTick(p){if(p.last===today)return;p.streak=p.last===yday?p.streak+1:1;p.last=today}
+function streakNow(p){return p.last===today||p.last===yday?p.streak:0}
+
+const app=$('#app');
+let agTab='num',vbTab='speak',tick=null;
+
+/* ===================== HOME ===================== */
+function home(){
+  clearInterval(tick);try{speechSynthesis.cancel()}catch(e){}
+  const miss=S.vb.missed.slice(-12);
+  app.innerHTML=`
+  <header class="hello"><h1>Who is learning today?</h1><p>15 minutes a day is enough. Same time every day works best.</p></header>
+  <div class="doors">
+    <button class="door ag" id="go-ag"><span class="tag">LKG · English &amp; Numbers</span><h2>Agasthya's Garage</h2><p>Count cars, learn letters, read words, race to the flag.</p><span class="mini-car">${CAR()}</span></button>
+    <button class="door vb" id="go-vb"><span class="tag">Class 6 · Speak English</span><h2>Vibhavari's Craft Table</h2><p>Speak, chat, read stories and sew a confidence quilt.</p><span class="mini-q">${FELT.slice(0,6).map((c,i)=>`<i style="background:${i<S.vb.patches?c:'transparent'}"></i>`).join('')}</span></button>
+  </div>
+  <section class="panel">
+    <h3>Parent corner</h3>
+    <div class="row">
+      <span class="chip">Agasthya: ${S.t.ag} right today</span><span class="chip">Stars: ${S.ag.stars}</span><span class="chip">Level ${S.ag.level}</span><span class="chip">Streak: ${streakNow(S.ag)} days</span>
+    </div>
+    <div class="row">
+      <span class="chip">Vibhavari: ${S.t.vb} right today</span><span class="chip">Sentences spoken: ${S.vb.spoken}</span><span class="chip">Quilt: ${S.vb.patches}/24</span><span class="chip">Level ${S.vb.level}</span><span class="chip">Streak: ${streakNow(S.vb)} days</span>
+    </div>
+    ${miss.length?`<p class="small">Spellings to practise with Vibhavari (they come back more often):</p><div class="row">${miss.map(w=>`<span class="chip miss">${esc(w)}</span>`).join('')}</div>`:''}
+    <p class="small">${SR?'Speaking check works in this browser. Allow the microphone when asked.':'This browser cannot listen to speech. Open the link in Google Chrome for the speaking check.'} Progress is saved on this device only.</p>
+    <div class="row" id="resetRow"><button class="linkbtn" id="reset">Reset all progress</button></div>
+  </section>
+  <section class="panel">
+    <h3>How to help at home</h3>
+    <ul class="tips">
+      <li>Sit with Agasthya. Read the options aloud for him and let him tap.</li>
+      <li>For Vibhavari, the most important parts are <b>Speak it</b>, <b>Talk time</b> and <b>1-minute talk</b>. Speaking aloud every day builds confidence.</li>
+      <li>Move her to the next level when she gets most answers right for a week.</li>
+      <li>At dinner, ask her to tell about her day in English for 2 minutes. Praise effort; correct gently by repeating the right sentence.</li>
+      <li>Give a real reward for a full race (Agasthya) or 6 quilt patches (Vibhavari).</li>
+    </ul>
+  </section>`;
+  $('#go-ag').onclick=agWorld;$('#go-vb').onclick=vbWorld;
+  $('#reset').onclick=()=>{$('#resetRow').innerHTML='<span class="small">Delete all stars, beads and progress?</span><button class="linkbtn" id="yes">Yes, reset</button><button class="linkbtn" style="color:var(--ink)" id="no">Cancel</button>';
+    $('#yes').onclick=()=>{S=fresh();save();home()};$('#no').onclick=home};
+}
+function party(title,text,say){
+  const d=document.createElement('div');d.className='party';
+  d.innerHTML=`<div><h3>${title}</h3><p>${text}</p><button class="next" style="background:var(--plum)">Keep going</button></div>`;
+  document.body.appendChild(d);speak(say);$('button',d).onclick=()=>d.remove();$('button',d).focus();
+}
+function levelChips(cur,names){return `<div class="levels"><span class="lbl">Level</span>${names.map((n,i)=>`<button class="lv ${cur===i+1?'on':''}" data-l="${i+1}">${n}</button>`).join('')}</div>`}
+
+/* ===================== AGASTHYA ===================== */
+const AG_TABS=[['num','Numbers'],['abc','Letters'],['words','Words']];
+function agWorld(){
+  app.innerHTML=`<div class="world ag-world">
+    <div class="top"><button class="back" id="back">← Home</button><h2>Agasthya's Garage</h2></div>
+    ${levelChips(S.ag.level,['1 · Starter','2 · Explorer','3 · Champion'])}
+    <div class="track"><div class="lane"><span class="racer" id="racer">${CAR()}</span><span class="flag"></span></div>
+      <div class="meta"><span id="steps"></span><span id="stars"></span></div></div>
+    <div class="tabs">${AG_TABS.map(([k,l])=>`<button class="tab ${k===agTab?'on':''}" data-k="${k}">${l}</button>`).join('')}</div>
+    <div class="stage" id="stage"></div></div>`;
+  $('#back').onclick=home;
+  $$('.tab').forEach(b=>b.onclick=()=>{agTab=b.dataset.k;agWorld()});
+  $$('.lv').forEach(b=>b.onclick=()=>{S.ag.level=+b.dataset.l;save();agWorld()});
+  agTrack();agNext();
+}
+function agTrack(){
+  const r=$('#racer');if(!r)return;
+  r.style.left=`calc(${S.ag.pos/10} * (100% - 96px))`;
+  $('#steps').textContent=`${10-S.ag.pos} more to the flag`;
+  $('#stars').textContent=`★ ${S.ag.stars} stars · ${streakNow(S.ag)} day streak`;
+}
+function agWin(){
+  S.t.ag++;S.ag.pos++;streakTick(S.ag);
+  if(S.ag.pos>=10){S.ag.pos=0;S.ag.stars++;save();agTrack();party('You won the race!',`Star number ${S.ag.stars} for Agasthya.`,'You won the race! Super driver Agasthya!')}
+  else{save();agTrack()}
+}
+const carsHTML=(n,gone=0,cols)=>`<div class="cars">${Array.from({length:n},(_,i)=>`<span class="${i>=n-gone?'gone':''}">${CAR(cols?cols:CAR_COLORS[i%8])}</span>`).join('')}</div>`;
+function numOpts(ans,min=0,max=60){const s=new Set([ans]);let g=0;while(s.size<3&&g++<50){const d=ans+pick([-3,-2,-1,1,2,3]);if(d>=min&&d<=max)s.add(d)}return shuffle([...s]).map(v=>({label:v,val:v}))}
+
+function agQ(){
+  const L=S.ag.level;
+  if(agTab==='num'){
+    const ty=pick(L===1?['count','count','find','next']:L===2?['count','find','next','before','more']:['add','add','sub','find','next','before']);
+    const max=L===1?10:L===2?20:50;
+    if(ty==='count'){const n=rand(1,L===1?10:15);return{html:`<div class="prompt">How many cars?</div>${carsHTML(n)}`,opts:numOpts(n,1,20),ans:n,say:'How many cars? Count them with your finger!',good:`Yes! ${n} cars!`,again:'Count again, slowly, one by one.'}}
+    if(ty==='find'){const n=rand(1,max);return{html:`<div class="prompt">Find the number</div><p class="hint">Tap the speaker to hear it again</p>`,opts:numOpts(n,0,max),ans:n,say:`Find the number ${n}`,good:`Yes! That is ${n}!`,again:`Listen again. ${n}.`,big:true}}
+    if(ty==='next'){const s=rand(1,max-3);return{html:`<div class="prompt">What comes next?</div><div class="seq"><span>${s}</span><span>${s+1}</span><span>${s+2}</span><span class="q">?</span></div>`,opts:numOpts(s+3,0,max+3),ans:s+3,say:`${s}, ${s+1}, ${s+2}, what comes next?`,good:`Yes! ${s+3} comes next!`,again:'Count up from the first number.'}}
+    if(ty==='before'){const s=rand(2,max-2);return{html:`<div class="prompt">What comes before?</div><div class="seq"><span class="q">?</span><span>${s}</span><span>${s+1}</span></div>`,opts:numOpts(s-1,0,max),ans:s-1,say:`What comes before ${s}?`,good:`Yes! ${s-1} comes before ${s}!`,again:'Count backwards by one.'}}
+    if(ty==='more'){let a=rand(1,9),b=rand(1,9);if(a===b)b=a>5?a-2:a+2;
+      return{html:`<div class="prompt">Which has more cars?</div><div class="groups"><div class="grp"><b style="color:#E8432E">Red</b>${carsHTML(a,0,'#E8432E')}</div><div class="grp"><b style="color:#2A6FDB">Blue</b>${carsHTML(b,0,'#2A6FDB')}</div></div>`,
+        opts:[{label:'Red',val:'Red'},{label:'Blue',val:'Blue'}],ans:a>b?'Red':'Blue',say:'Which has more cars? Red or blue?',good:`Yes! ${a>b?'Red':'Blue'} has more!`,again:'Count each group.'}}
+    if(ty==='add'){const a=rand(1,5),b=rand(1,5);return{html:`<div class="prompt">Add the cars</div><div class="groups"><div class="grp">${carsHTML(a,0,'#E8432E')}</div><div class="sum">+</div><div class="grp">${carsHTML(b,0,'#2A6FDB')}</div></div><div class="sum">${a} + ${b} = ?</div>`,
+      opts:numOpts(a+b,1,12),ans:a+b,say:`${a} cars plus ${b} cars. How many altogether?`,good:`Yes! ${a} plus ${b} is ${a+b}!`,again:'Count all the cars together.'}}
+    const n=rand(3,9),k=rand(1,n-1);
+    return{html:`<div class="prompt">Some cars drove away!</div>${carsHTML(n,k)}<div class="sum">${n} − ${k} = ?</div>`,opts:numOpts(n-k,0,10),ans:n-k,say:`${n} cars. ${k} drove away. How many are left?`,good:`Yes! ${n} take away ${k} is ${n-k}!`,again:'Count only the cars without a cross.'};
+  }
+  if(agTab==='abc'){
+    const ty=pick(L===1?['same','same','small']:L===2?['brand','brand2','sound','small']:['first','vowel','vowel','brand']);
+    const AZ='ABCDEFGHIJKLMNOPRSTUVWYZ'.split('');
+    if(ty==='same'){const L1=pick(AZ),o=shuffle(AZ.filter(x=>x!==L1)).slice(0,3);return{html:`<div class="big-letter">${L1}</div><div class="prompt">Find the same letter</div>`,opts:shuffle([L1,...o]).map(v=>({label:v,val:v})),ans:L1,say:`This is ${L1}. Find ${L1}.`,good:`Yes! ${L1}!`,again:'Look carefully at the shape.'}}
+    if(ty==='small'){const pairs=[['B','d'],['D','b'],['P','q'],['Q','p'],['M','w'],['N','u'],['H','n'],['G','q']];const L1=pick(AZ),lo=L1.toLowerCase();
+      const conf=(pairs.find(p=>p[0]===L1)||[])[1];const o=new Set([lo]);if(conf)o.add(conf);while(o.size<3)o.add(pick(AZ).toLowerCase());
+      return{html:`<div class="big-letter">${L1}</div><div class="prompt">Find the small ${L1}</div>`,opts:shuffle([...o]).map(v=>({label:v,val:v})),ans:lo,say:`Big ${L1}. Find small ${L1}.`,good:`Yes! Big ${L1}, small ${lo}!`,again:'Find the small letter that matches.'}}
+    if(ty==='brand'){const b=pick(BRANDS),F=b[0];const s=new Set([F]);while(s.size<3)s.add(pick(AZ));
+      return{html:`<div style="width:150px;color:${pick(CAR_COLORS)}">${CAR()}</div><div class="brand"><b>${F}</b>${b.slice(1)}</div><div class="prompt">${b} starts with which letter?</div>`,opts:shuffle([...s]).map(v=>({label:v,val:v})),ans:F,say:`${b}. ${b} starts with which letter?`,good:`Yes! ${b} starts with ${F}!`,again:`Listen: ${b}. Look at the first letter.`}}
+    if(ty==='brand2'){const b=pick(BRANDS),F=b[0];const o=shuffle(BRANDS.filter(x=>x[0]!==F)).slice(0,2);
+      return{html:`<div class="big-letter">${F}</div><div class="prompt">Which car starts with ${F}?</div>`,opts:shuffle([b,...o]).map(v=>({label:v,val:v})),ans:b,say:`Which car starts with ${F}?`,good:`Yes! ${F} for ${b}!`,again:`Find the car that begins with ${F}.`,small:true}}
+    if(ty==='sound'){const [l,w,e]=pick(PHON);const s=new Set([l]);while(s.size<3)s.add(pick(PHON)[0]);
+      return{html:`<div class="pic">${e}</div><div class="prompt">${w} starts with…</div>`,opts:shuffle([...s]).map(v=>({label:v,val:v})),ans:l,say:`${w}. What sound does ${w} start with?`,good:`Yes! ${l} for ${w}!`,again:`Say it slowly: ${w}.`}}
+    if(ty==='first'){const [w,p]=pick(CVC),F=w[0];const s=new Set([F]);while(s.size<3)s.add(pick('bcdfghjmnpstvwz'.split('')));
+      return{html:`<div class="pic">${p}</div><div class="word"><span class="gap">?</span>${w.slice(1)}</div>`,opts:shuffle([...s]).map(v=>({label:v,val:v})),ans:F,say:`${w}. What letter does ${w} start with?`,good:`${w.split('').join(', ')}. ${w}!`,again:`Say it slowly: ${w}.`}}
+    const cands=CVC.filter(([w])=>w.length===3&&'aeiou'.includes(w[1]));const [w,p]=pick(cands),V=w[1];const s=new Set([V]);while(s.size<3)s.add(pick('aeiou'.split('')));
+    return{html:`<div class="pic">${p}</div><div class="word">${w[0]}<span class="gap">?</span>${w[2]}</div><div class="prompt">Find the middle sound</div>`,opts:shuffle([...s]).map(v=>({label:v,val:v})),ans:V,say:`${w}. Find the middle sound.`,good:`${w.split('').join(', ')}. ${w}!`,again:`Say it slowly: ${w}. Listen for the middle.`};
+  }
+  /* words */
+  const ty=pick(L===1?['hear','hear']:L===2?['sight','sight','hear']:['read','read','sent','sight']);
+  if(ty==='hear'){const all=PHON.map(p=>[p[1],p[2]]);const [w,e]=pick(all);const o=shuffle(all.filter(x=>x[0]!==w)).slice(0,2);
+    return{html:`<div class="prompt">Find the ${esc(w)}</div><p class="hint">Listen and tap the picture</p>`,opts:shuffle([[w,e],...o]).map(([v,em])=>({label:em,val:v,cls:'emo'})),ans:w,say:`Find the ${w}`,good:`Yes! ${w}!`,again:`Listen again. ${w}.`}}
+  if(ty==='sight'){const w=pick(SIGHT);const o=shuffle(SIGHT.filter(x=>x!==w)).slice(0,2);
+    return{html:`<div class="prompt">Find the word</div><p class="hint">Listen and tap the word</p>`,opts:shuffle([w,...o]).map(v=>({label:v,val:v})),ans:w,say:`Find the word: ${w}`,good:`Yes! ${w}!`,again:`Listen again: ${w}.`}}
+  if(ty==='read'){const [w,p]=pick(CVC);const o=shuffle(CVC.filter(x=>x[0]!==w)).slice(0,2);
+    return{html:`<div class="prompt">Read the word</div><div class="readme">${w}</div><p class="hint">Sound it out, then tap the picture</p>`,opts:shuffle([[w,p],...o]).map(([v,em])=>({label:em,val:v,cls:'emo'})),ans:w,say:`Read the word.`,good:`${w.split('').join(', ')}. ${w}!`,again:'Sound each letter, then blend.',hearWord:w}}
+  const [s,p]=pick(READ_SENT);const o=shuffle(READ_SENT.filter(x=>x[1]!==p)).slice(0,2).map(x=>x[1]);
+  return{html:`<div class="prompt">Read the sentence</div><div class="readme" style="font-size:clamp(26px,6vw,40px)">${s}</div>`,opts:shuffle([p,...o]).map(v=>({label:v,val:v,cls:'emo'})),ans:p,say:'Read the sentence, then tap the picture.',good:`Yes! ${s}`,again:'Read it again slowly, one word at a time.',hearWord:s};
+}
+function agNext(){
+  const st=$('#stage');if(!st)return;const q=agQ();
+  st.innerHTML=`${q.html}<button class="say" id="say">🔊 Hear it</button><div class="opts">${q.opts.map(o=>`<button class="opt ${o.cls||''}" ${q.small?'style="font-size:20px"':''} ${q.big?'style="font-size:40px;min-width:100px"':''} data-v="${esc(o.val)}">${esc(o.label)}</button>`).join('')}</div><div class="feedback" id="fb"></div>`;
+  speak(q.say);$('#say').onclick=()=>speak(q.hearWord||q.say);
+  let done=false;
+  $$('.opt',st).forEach(b=>b.onclick=()=>{
+    if(done)return;
+    if(b.dataset.v==String(q.ans)){done=true;b.classList.add('right');$('#fb').className='feedback ok';$('#fb').textContent='Great job!';speak(q.good);agWin();setTimeout(()=>{if($('#fb'))agNext()},1800)}
+    else{b.classList.add('wrong');$('#fb').className='feedback no';$('#fb').textContent='Try again!';speak(q.again);setTimeout(()=>b.classList.remove('wrong'),400)}
+  });
+}
+
+/* ===================== VIBHAVARI ===================== */
+const VB_TABS=[['speak','Speak it'],['talk','Talk time'],['story','Story time'],['words','Word power'],['build','Build it'],['fix','Fix it'],['spell','Spell it'],['phrases','Phrase book'],['minute','Speaking timer']];
+const VB_LEVELS=['1 · Everyday','2 · Confident','3 · Fluent'];
+function vbWorld(){
+  clearInterval(tick);
+  app.innerHTML=`<div class="world vb-world">
+    <div class="top"><button class="back" id="back">← Home</button><h2>Vibhavari's Craft Table</h2></div>
+    ${levelChips(S.vb.level,VB_LEVELS)}
+    <div class="craft"><div><div class="label">Bracelet · 10 beads sews a quilt patch</div><div class="bracelet" id="brace"></div></div>
+      <div><div class="label">Quilt</div><div class="quilt" id="quilt"></div></div>
+      <div><div class="label">Streak</div><div class="streak" id="streak"></div></div></div>
+    <div class="tabs">${VB_TABS.map(([k,l])=>`<button class="tab ${k===vbTab?'on':''}" data-k="${k}">${l}</button>`).join('')}</div>
+    <div class="stage" id="stage"></div></div>`;
+  $('#back').onclick=home;
+  $$('.tab').forEach(b=>b.onclick=()=>{vbTab=b.dataset.k;vbWorld()});
+  $$('.lv').forEach(b=>b.onclick=()=>{S.vb.level=+b.dataset.l;save();Q={};vbWorld()});
+  vbCraft();vbNext(true);
+}
+function vbCraft(){
+  const br=$('#brace');if(!br)return;
+  br.innerHTML=Array.from({length:10},(_,i)=>`<span class="bead ${i<S.vb.beads?'on':''}" style="${i<S.vb.beads?`background:${FELT[i%8]}`:''}"></span>`).join('');
+  const pats=['repeating-linear-gradient(45deg,rgba(255,255,255,.35) 0 3px,transparent 3px 7px)','radial-gradient(rgba(255,255,255,.5) 2px,transparent 2.5px) 0 0/6px 6px','linear-gradient(90deg,rgba(255,255,255,.3) 50%,transparent 0) 0 0/6px 6px'];
+  $('#quilt').innerHTML=Array.from({length:24},(_,i)=>i<S.vb.patches?`<i style="border:0;background:${FELT[i%8]};background-image:${pats[i%3]}"></i>`:'<i></i>').join('');
+  $('#streak').textContent=`${streakNow(S.vb)} day${streakNow(S.vb)===1?'':'s'}`;
+}
+function vbWin(n=1){
+  for(let i=0;i<n;i++){S.t.vb++;S.vb.beads++;
+    if(S.vb.beads>=10){S.vb.beads=0;S.vb.patches++;setTimeout(()=>party('New quilt patch!',`Patch ${S.vb.patches} of 24 is sewn. Six patches earns a real craft reward!`,'Well done Vibhavari! A new quilt patch!'),600)}}
+  streakTick(S.vb);save();vbCraft();
+}
+function fb(ok,msg){const f=$('#fb');if(!f)return;f.className='feedback '+(ok===true?'ok':ok==='mid'?'mid':'no');f.textContent=msg}
+function nextBtn(label='Next →',fn=vbNext){const b=document.createElement('button');b.className='next';b.textContent=label;b.onclick=fn;$('#stage').appendChild(b);return b}
+/* shuffled queues so items do not repeat until all are seen */
+let Q={};
+function fromQueue(key,arr){if(!Q[key]||!Q[key].length)Q[key]=shuffle(arr.map((_,i)=>i));return arr[Q[key].pop()]}
+const LV=()=>S.vb.level;
+
+/* --- Speak it --- */
+function vbSpeak(st){
+  const list=SPEAK[LV()],[topic,s]=fromQueue('speak'+LV(),list);
+  const left=(Q['speak'+LV()]||[]).length;
+  st.innerHTML=`<span class="topic">${esc(topic)}</span><p class="hint">Listen, then say the sentence. ${list.length-left} of ${list.length} in this level.</p><div class="bigsent">${esc(s)}</div><div id="mb" style="width:100%"></div><div class="feedback" id="fb"></div>`;
+  $('#mb').appendChild(micBlock(s,()=>{S.vb.spoken++;vbWin()}));
+  speak(s);
+  const b=nextBtn('Next sentence →');b.style.background='var(--plum)';
+}
+
+/* --- Talk time (role play) --- */
+let scene=null,turn=0;
+function vbTalk(st){
+  const scenes=SCENES[LV()];
+  if(!scene||!scenes.includes(scene)){scene=scenes[0];turn=0}
+  st.innerHTML=`<div class="scenes">${scenes.map((s,i)=>`<button data-i="${i}" class="${s===scene?'on':''}">${esc(s.t)}</button>`).join('')}</div><div class="chat" id="chat"></div><div id="act" style="width:100%;display:flex;flex-direction:column;gap:10px;align-items:center"></div><div class="feedback" id="fb"></div>`;
+  $$('.scenes button',st).forEach(b=>b.onclick=()=>{scene=scenes[+b.dataset.i];turn=0;vbTalk(st)});
+  const chat=$('#chat');
+  for(let i=0;i<turn;i++){const [w,l,c]=scene.turns[i];chat.insertAdjacentHTML('beforeend',`<div class="bub them"><small>${esc(w)}</small>${esc(l)}</div><div class="bub me"><small>You</small>${esc(c[0])}</div>`)}
+  if(turn>=scene.turns.length){
+    $('#act').innerHTML=`<div class="feedback ok">Conversation complete! Now act it out with Amma or Appa. You speak your part.</div>`;
+    const nx=scenes[(scenes.indexOf(scene)+1)%scenes.length];
+    nextBtn('Next conversation →',()=>{scene=nx;turn=0;vbNext()});return;
+  }
+  const [who,line,choices,tip]=scene.turns[turn];
+  chat.insertAdjacentHTML('beforeend',`<div class="bub them"><small>${esc(who)}</small>${esc(line)} <button class="say" style="padding:2px 8px;font-size:13px" id="rep">🔊</button></div>`);
+  speak(line);$('#rep').onclick=()=>speak(line);
+  const act=$('#act');
+  act.innerHTML=`<p class="hint">What is the best reply?</p><div class="list">${shuffle(choices).map(c=>`<button class="sent" data-v="${esc(c)}">${esc(c)}</button>`).join('')}</div>`;
+  let done=false;
+  $$('.sent',act).forEach(b=>b.onclick=()=>{
+    if(done)return;done=true;const ok=b.dataset.v===choices[0];b.classList.add(ok?'right':'wrong');
+    $$('.sent',act).forEach(x=>{if(x.dataset.v===choices[0])x.classList.add('right')});
+    if(ok)vbWin();fb(ok,ok?'Great reply!':'Good try. The green reply is best.');
+    act.insertAdjacentHTML('beforeend',`<div class="explain"><b>Tip:</b> ${esc(tip)}</div><p class="hint">Now say the best reply aloud:</p><div class="bigsent" style="font-size:24px">${esc(choices[0])}</div>`);
+    act.appendChild(micBlock(choices[0],()=>{S.vb.spoken++;vbWin()}));
+    nextBtn('Continue →',()=>{turn++;vbNext()});
+  });
+}
+
+/* --- Story time --- */
+let storyI=0,storyQ=-1;
+function vbStory(st){
+  const list=STORIES[LV()];if(storyI>=list.length)storyI=0;const s=list[storyI];
+  if(storyQ<0){
+    st.innerHTML=`<div class="scenes">${list.map((x,i)=>`<button data-i="${i}" class="${i===storyI?'on':''}">${esc(x.t)}</button>`).join('')}</div>
+      <article class="story"><h3>${esc(s.t)}</h3>${s.text.map(p=>`<p>${esc(p)}</p>`).join('')}<p class="small">New words: ${s.words.map(w=>`<b>${esc(w)}</b>`).join(', ')}</p></article>
+      <div class="btnrow"><button class="say" id="read">🔊 Read it to me</button><button class="say" id="stop">Stop</button></div>
+      <p class="hint">Read it aloud yourself once. Then answer 3 questions.</p>`;
+    $$('.scenes button',st).forEach(b=>b.onclick=()=>{storyI=+b.dataset.i;storyQ=-1;vbStory(st)});
+    $('#read').onclick=()=>speak(s.text.join(' '),.85);$('#stop').onclick=()=>{try{speechSynthesis.cancel()}catch(e){}};
+    nextBtn('Answer questions →',()=>{storyQ=0;vbNext()});return;
+  }
+  if(storyQ>=s.qs.length){
+    st.innerHTML=`<div class="prompt">Story finished!</div><p class="meaning">Now tell the story to someone at home in your own words. Use: First… Then… After that… Finally…</p>`;
+    nextBtn('Next story →',()=>{storyI=(storyI+1)%list.length;storyQ=-1;vbNext()});nextBtn('Read again',()=>{storyQ=-1;vbNext()}).style.background='var(--teal)';return;
+  }
+  const [q,opts,why]=s.qs[storyQ];
+  st.innerHTML=`<p class="hint">${esc(s.t)} · Question ${storyQ+1} of ${s.qs.length}</p><div class="prompt">${esc(q)}</div><div class="list">${shuffle(opts).map(o=>`<button class="sent" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div><div class="feedback" id="fb"></div><div id="after" style="width:100%;display:flex;justify-content:center"></div>`;
+  let done=false;
+  $$('.sent',st).forEach(b=>b.onclick=()=>{if(done)return;done=true;const ok=b.dataset.v===opts[0];b.classList.add(ok?'right':'wrong');
+    $$('.sent',st).forEach(x=>{if(x.dataset.v===opts[0])x.classList.add('right')});if(ok)vbWin();fb(ok,ok?'Correct!':'The green answer is right.');
+    $('#after').innerHTML=`<div class="explain"><b>Why:</b> ${esc(why)}</div>`;nextBtn('Next →',()=>{storyQ++;vbNext()})});
+}
+
+/* --- Word power --- */
+function vbWords(st){
+  const list=WORDS[LV()],[w,m,s]=fromQueue('words'+LV(),list);
+  const o=shuffle(list.filter(x=>x[0]!==w)).slice(0,3).map(x=>x[0]);
+  st.innerHTML=`<div class="prompt">Which word fits?</div><div class="bigsent" style="font-size:26px">${esc(s).replace('___','<span style="border-bottom:3px solid var(--plum);padding:0 30px"></span>')}</div>
+    <div class="opts">${shuffle([w,...o]).map(x=>`<button class="opt" style="font-size:22px" data-v="${esc(x)}">${esc(x)}</button>`).join('')}</div><div class="feedback" id="fb"></div><div id="after" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:10px"></div>`;
+  let done=false;
+  $$('.opt',st).forEach(b=>b.onclick=()=>{if(done)return;done=true;const ok=b.dataset.v===w;b.classList.add(ok?'right':'wrong');
+    $$('.opt',st).forEach(x=>{if(x.dataset.v===w)x.classList.add('right')});if(ok)vbWin();fb(ok,ok?'Correct!':`The word is “${w}”.`);
+    const full=s.replace('___',w);
+    $('#after').innerHTML=`<div class="explain"><b>${esc(w)}</b> means: ${esc(m)}.<br>Now make your own sentence with “${esc(w)}” and say it aloud.</div><p class="hint">First, say this sentence:</p>`;
+    $('#after').appendChild(micBlock(full,()=>{S.vb.spoken++;vbWin()}));speak(full);nextBtn()});
+}
+
+/* --- Build it --- */
+function vbBuild(st){
+  const pool=SPEAK[LV()].filter(x=>x[1].split(' ').length<=13);
+  const s=fromQueue('build'+LV(),pool)[1],words=s.split(' '),order=shuffle(words.map((w,i)=>({w,i})));let built=[];
+  st.innerHTML=`<div class="prompt">Make a correct sentence</div><p class="hint">Tap the word cards in the right order.</p>
+    <div class="string" id="str"></div><div class="opts" id="pool">${order.map((o,k)=>`<button class="wcard" data-k="${k}">${esc(o.w)}</button>`).join('')}</div>
+    <div class="btnrow" id="ctl"><button class="ghost" id="clr">Clear</button><button class="next" id="chk">Check</button></div><div class="feedback" id="fb"></div><div id="after" style="width:100%"></div>`;
+  const draw=()=>{const str=$('#str');str.innerHTML=built.length?built.map((k,i)=>`<button class="wcard" data-i="${i}">${esc(order[k].w)}</button>`).join(''):'<span class="hint">Your sentence goes here</span>';
+    $$('#pool .wcard',st).forEach(b=>b.classList.toggle('used',built.includes(+b.dataset.k)));
+    $$('.wcard',str).forEach(b=>b.onclick=()=>{built.splice(+b.dataset.i,1);draw()})};
+  draw();
+  $$('#pool .wcard',st).forEach(b=>b.onclick=()=>{const k=+b.dataset.k;if(!built.includes(k)){built.push(k);draw()}});
+  $('#clr').onclick=()=>{built=[];draw()};
+  $('#chk').onclick=()=>{
+    if(built.length<words.length){fb(false,'Use all the word cards.');return}
+    const ok=built.map(k=>order[k].w).join(' ')===s;$('#ctl').hidden=true;
+    fb(ok,ok?'Well built! Now say it aloud.':'Not quite. Here is the correct sentence. Say it aloud:');if(ok)vbWin();
+    $('#after').innerHTML=`<div class="bigsent" style="font-size:24px;margin:0 auto">${esc(s)}</div>`;$('#after').appendChild(micBlock(s,()=>{S.vb.spoken++;vbWin()}));speak(s);nextBtn();
+  };
+}
+
+/* --- Fix it --- */
+function vbFix(st){
+  const [opts,why]=fromQueue('fix'+LV(),GRAMMAR[LV()]),right=opts[0];
+  st.innerHTML=`<div class="prompt">Which sentence is correct?</div><div class="list">${shuffle(opts).map(o=>`<button class="sent" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div><div class="feedback" id="fb"></div><div id="after" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:10px"></div>`;
+  let done=false;
+  $$('.sent',st).forEach(b=>b.onclick=()=>{if(done)return;done=true;const ok=b.dataset.v===right;b.classList.add(ok?'right':'wrong');
+    $$('.sent',st).forEach(x=>{if(x.dataset.v===right)x.classList.add('right')});if(ok)vbWin();fb(ok,ok?'Correct!':'Good try. The green one is right.');
+    $('#after').innerHTML=`<div class="explain"><b>Why:</b> ${esc(why)}</div><p class="hint">Say the correct sentence aloud 2 times:</p>`;
+    $('#after').appendChild(micBlock(right,()=>{S.vb.spoken++;vbWin()}));speak(right);nextBtn()});
+}
+
+/* --- Spell it --- */
+function vbSpell(st){
+  const list=SPELL[LV()];let item=null;
+  const missed=S.vb.missed.map(w=>list.find(x=>x[0]===w)).filter(Boolean);
+  item=missed.length&&Math.random()<.4?pick(missed):fromQueue('spell'+LV(),list);
+  const [word,mean,parts]=item;
+  const letters=shuffle(word.toLowerCase().split('').map(c=>({c})));let built=[];
+  st.innerHTML=`<div class="prompt">Spell the word</div><p class="meaning">Meaning: ${esc(mean)}</p><button class="say" id="say">🔊 Hear the word</button>
+    <div class="string" id="str"></div><div class="opts" id="beads">${letters.map((l,k)=>`<button class="tile" data-k="${k}" style="background:${FELT[k%8]}">${l.c}</button>`).join('')}</div>
+    <div class="btnrow" id="ctl"><button class="ghost" id="clr">Clear</button><button class="next" id="chk">Check</button></div><div class="feedback" id="fb"></div><div id="after"></div>`;
+  const s=()=>speak(word);s();$('#say').onclick=s;
+  const draw=()=>{const str=$('#str');str.innerHTML=built.length?built.map((k,i)=>`<button class="tile" data-i="${i}" style="background:${FELT[k%8]}">${letters[k].c}</button>`).join(''):'<span class="hint">Tap the beads in order</span>';
+    $$('#beads .tile',st).forEach(b=>b.classList.toggle('used',built.includes(+b.dataset.k)));
+    $$('.tile',str).forEach(b=>b.onclick=()=>{built.splice(+b.dataset.i,1);draw()})};
+  draw();
+  $$('#beads .tile',st).forEach(b=>b.onclick=()=>{const k=+b.dataset.k;if(!built.includes(k)){built.push(k);draw()}});
+  $('#clr').onclick=()=>{built=[];draw()};
+  $('#chk').onclick=()=>{
+    const ans=built.map(k=>letters[k].c).join('');if(ans.length<word.length){fb(false,'Use all the beads first.');return}
+    $('#ctl').hidden=true;const ok=ans===word.toLowerCase();
+    if(ok){fb(true,'Perfect spelling!');speak('Perfect! '+word);S.vb.missed=S.vb.missed.filter(w=>w!==word);vbWin()}
+    else{fb(false,'Almost! Here is the right spelling:');speak(`The correct spelling is ${word.split('').join(' ')}`);if(!S.vb.missed.includes(word))S.vb.missed.push(word);S.vb.missed=S.vb.missed.slice(-25);save()}
+    $('#after').innerHTML=`<div class="correct-word">${esc(word)}</div><p class="hint">Break it into parts: <b style="color:var(--plum)">${esc(parts)}</b>. Write it 3 times in your notebook.</p>`;nextBtn();
+  };
+}
+
+/* --- Phrase book --- */
+let openCat=0;
+function vbPhrases(st){
+  st.innerHTML=`<div class="prompt">Useful phrases</div><p class="hint">Learn these by heart. Tap Practise to say one aloud.</p><div class="list" id="cats"></div>`;
+  const cats=$('#cats');
+  PHRASES.forEach(([title,items],ci)=>{
+    const c=document.createElement('div');c.className='cat';
+    c.innerHTML=`<button>${esc(title)}<span>${ci===openCat?'−':'+'}</span></button><ul ${ci===openCat?'':'hidden'}>${items.map((p,i)=>`<li data-i="${i}"><div class="pr"><span>${esc(p)}</span><div class="btnrow"><button class="say" data-a="h">🔊</button><button class="say mic" data-a="p">Practise</button></div></div></li>`).join('')}</ul>`;
+    $('button',c).onclick=()=>{openCat=openCat===ci?-1:ci;vbPhrases(st)};
+    $$('li',c).forEach(li=>{const p=items[+li.dataset.i];$('[data-a=h]',li).onclick=()=>speak(p);
+      $('[data-a=p]',li).onclick=e=>{e.target.closest('.btnrow').hidden=true;li.appendChild(micBlock(p.replace(/…/g,''),()=>{S.vb.spoken++;vbWin()}))}});
+    cats.appendChild(c);
+  });
+}
+
+/* --- 1-minute talk --- */
+function vbMinute(st){
+  const [p,starters]=fromQueue('talk'+LV(),TALKS[LV()]),secs=[60,90,120][LV()-1];let left=secs;clearInterval(tick);
+  const fmt=n=>`${Math.floor(n/60)}:${String(n%60).padStart(2,'0')}`;
+  st.innerHTML=`<div class="prompt">Speak in English for ${['1 minute','1½ minutes','2 minutes'][LV()-1]}</div><p class="meaning">${esc(p)}</p>
+    <p class="hint">Use these sentence starters:</p><div class="starters">${starters.map(s=>`<span>${esc(s)}</span>`).join('')}</div>
+    <p class="hint">Talk to Amma or Appa. Use full sentences. Mistakes are fine. Keep talking!</p>
+    <div class="timer" id="tm">${fmt(secs)}</div>
+    <div class="btnrow" id="ctl"><button class="next" id="start">Start timer</button><button class="ghost" id="other">Another topic</button></div><div class="feedback" id="fb"></div>`;
+  speak(p);$('#other').onclick=vbNext;
+  $('#start').onclick=()=>{$('#start').disabled=true;tick=setInterval(()=>{left--;const t=$('#tm');if(!t){clearInterval(tick);return}t.textContent=fmt(left);
+    if(left<=0){clearInterval(tick);t.textContent='Done!';fb(true,'Great talking! Parent: tap below if she spoke well.');
+      nextBtn('She spoke well · add 3 beads',()=>{vbWin(3);vbNext()})}},1000)};
+}
+
+function vbNext(noScroll){
+  const st=$('#stage');if(!st)return;clearInterval(tick);try{speechSynthesis.cancel()}catch(e){}
+  ({speak:vbSpeak,talk:vbTalk,story:vbStory,words:vbWords,build:vbBuild,fix:vbFix,spell:vbSpell,phrases:vbPhrases,minute:vbMinute})[vbTab](st);
+  if(noScroll!==true)window.scrollTo({top:Math.max(0,st.offsetTop-80),behavior:'smooth'});
+}
+
+home();
+
+</script>
+</body>
+</html>
