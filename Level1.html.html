@@ -1,0 +1,463 @@
+<title>Agasthya &amp; Vibhavari Learning Corner</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Baloo+Tamma+2:wght@500;700&family=Nunito:wght@500;700;800&display=swap">
+<style>
+/* Layout: a home "doorway" with two worlds — a road/garage for the 5-year-old, a craft table for the 11-year-old. One activity stage per world. */
+:root{
+  color-scheme: light;
+  --ink:#23232B; --muted:#5E5A66;
+  --road:#2E3138; --lane:#F6C431; --signal:#E8432E; --sky:#DCEFF7; --grass:#7BC47F;
+  --paper:#FBF6EC; --kraft:#E9D9BF; --felt:#E86A8E; --teal:#2A9D8F; --thread:#3B2F2A; --plum:#6D4C8D;
+  --ok:#2F9E58; --bad:#D9472B;
+  --display:"Baloo 2","Baloo Tamma 2",system-ui,sans-serif;
+  --kn:"Baloo Tamma 2","Noto Sans Kannada",system-ui,sans-serif;
+  --body:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 40px}
+.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1,h2,h3{font-family:var(--display);line-height:1.1;margin:0;text-wrap:balance}
+button{font:inherit;cursor:pointer;color:inherit}
+button:focus-visible{outline:3px solid var(--plum);outline-offset:3px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- Home ---------- */
+.hello{display:flex;flex-direction:column;gap:4px;padding-top:8px}
+.hello h1{font-size:clamp(28px,6vw,44px);font-weight:800}
+.hello p{margin:0;color:var(--muted);max-width:60ch}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.door{border:0;border-radius:22px;padding:22px;text-align:left;display:flex;flex-direction:column;gap:10px;min-height:210px;position:relative;overflow:hidden;transition:transform .15s}
+.door:hover{transform:translateY(-3px)}
+.door h2{font-size:34px}
+.door p{margin:0;max-width:34ch;font-weight:700}
+.door .tag{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;opacity:.85}
+.door.ag{background:var(--road);color:#fff}
+.door.ag::after{content:"";position:absolute;left:0;right:0;bottom:34px;height:6px;background:repeating-linear-gradient(90deg,var(--lane) 0 34px,transparent 34px 60px)}
+.door.ag .mini-car{position:absolute;right:18px;bottom:44px;width:96px;color:var(--signal)}
+.door.vb{background:var(--kraft);color:var(--thread);outline:3px dashed rgba(59,47,42,.35);outline-offset:-12px}
+.door.vb .mini-q{position:absolute;right:20px;bottom:20px;display:grid;grid-template-columns:repeat(3,22px);gap:4px}
+.door.vb .mini-q i{width:22px;height:22px;border-radius:5px;display:block}
+.parent{background:#fff;border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:10px;border:1px solid #E7DFD0}
+.parent h3{font-size:20px}
+.parent .row{display:flex;flex-wrap:wrap;gap:10px}
+.chip{background:var(--paper);border:1px solid #E7DFD0;border-radius:999px;padding:4px 12px;font-weight:700;font-size:14px;font-variant-numeric:tabular-nums}
+.chip.miss{background:#FDE7EC;border-color:#F4C3CF}
+.small{font-size:13px;color:var(--muted);margin:0}
+
+/* ---------- World shell ---------- */
+.world{display:flex;flex-direction:column;gap:14px}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.back{border:0;background:rgba(0,0,0,.08);border-radius:999px;padding:8px 14px;font-weight:800}
+.top h2{font-size:28px;flex:1;min-width:0}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tab{border:2px solid transparent;border-radius:14px;padding:8px 14px;font-weight:800;font-size:15px;background:#fff}
+.stage{border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center;min-height:340px}
+.prompt{font-family:var(--display);font-size:clamp(22px,4.5vw,30px);font-weight:700}
+.hint{margin:0;color:var(--muted);font-weight:700}
+.opts{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;width:100%}
+.opt{border:3px solid transparent;border-radius:18px;background:#fff;min-width:84px;padding:12px 18px;font-family:var(--display);font-size:26px;font-weight:700;transition:transform .1s}
+.opt:active{transform:scale(.96)}
+.opt.right{border-color:var(--ok);background:#E3F5E9}
+.opt.wrong{border-color:var(--bad);background:#FBE3DE;animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.say{border:0;border-radius:999px;padding:8px 16px;font-weight:800;display:inline-flex;gap:6px;align-items:center}
+.feedback{min-height:28px;font-weight:800;font-size:18px}
+.feedback.ok{color:var(--ok)} .feedback.no{color:var(--bad)}
+.explain{background:#fff;border-radius:14px;padding:12px 16px;text-align:left;max-width:60ch;width:100%;border-left:5px solid var(--teal)}
+.next{border:0;border-radius:14px;padding:12px 26px;font-weight:800;font-size:17px;color:#fff}
+
+/* ---------- Agasthya: road world ---------- */
+.ag-world{--accent:var(--signal)}
+.ag-world .top h2{color:var(--road)}
+.ag-world .tab.on{background:var(--road);color:var(--lane)}
+.ag-world .stage{background:var(--sky)}
+.ag-world .say{background:var(--lane);color:var(--road)}
+.ag-world .next{background:var(--signal)}
+.track{background:var(--road);border-radius:18px;padding:14px 16px 12px;display:flex;flex-direction:column;gap:6px;color:#fff}
+.lane{position:relative;height:44px;background:repeating-linear-gradient(90deg,var(--lane) 0 22px,transparent 22px 40px) center/100% 4px no-repeat}
+.lane .flag{position:absolute;right:0;top:4px;width:30px;height:36px;background:conic-gradient(#fff 25%,#111 0 50%,#fff 0 75%,#111 0) 0 0/12px 12px;border-radius:4px}
+.lane .racer{position:absolute;top:2px;width:62px;color:var(--signal);transition:left .5s cubic-bezier(.3,1.4,.6,1)}
+.track .meta{display:flex;justify-content:space-between;font-weight:800;font-size:14px;font-variant-numeric:tabular-nums}
+.cars{display:grid;grid-template-columns:repeat(5,minmax(0,64px));gap:8px 10px;justify-content:center}
+.cars span{display:block}
+.big-letter{font-family:var(--display);font-size:clamp(84px,20vw,130px);line-height:1;font-weight:800;color:var(--road);background:#fff;border-radius:24px;padding:10px 34px}
+.big-letter.kn{font-family:var(--kn)}
+.opt.kn{font-family:var(--kn);font-size:38px}
+.opt.hi{font-size:38px}
+.brand{font-family:var(--display);font-weight:800;font-size:clamp(36px,9vw,56px);color:var(--road)}
+.brand b{color:var(--signal)}
+.pic{font-size:84px;line-height:1}
+.word{font-family:var(--display);font-size:56px;font-weight:800;letter-spacing:.06em;color:var(--road)}
+.word .gap{display:inline-block;min-width:44px;border-bottom:5px solid var(--signal);color:var(--signal)}
+
+/* ---------- Vibhavari: craft world ---------- */
+.vb-world .top h2{color:var(--thread)}
+.vb-world .tab{background:#fff;border-color:#E7DFD0}
+.vb-world .tab.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.vb-world .stage{background:var(--kraft);outline:3px dashed rgba(59,47,42,.3);outline-offset:-10px}
+.vb-world .say{background:#fff;color:var(--thread)}
+.vb-world .next{background:var(--plum)}
+.craft{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;background:#fff;border-radius:18px;padding:14px 16px;border:1px solid #E7DFD0}
+.bracelet{display:flex;gap:6px;flex-wrap:wrap;align-items:center;position:relative;padding:8px 4px}
+.bracelet::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px solid var(--thread);opacity:.4}
+.bead{width:26px;height:26px;border-radius:50%;border:2px dashed #CDBFA8;background:var(--paper);position:relative}
+.bead.on{border:0;box-shadow:inset -4px -4px 0 rgba(0,0,0,.12)}
+.quilt{display:grid;grid-template-columns:repeat(4,24px);gap:3px}
+.quilt i{width:24px;height:24px;border-radius:4px;background:var(--paper);border:1px dashed #CDBFA8;display:block}
+.craft .label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--muted)}
+.meaning{font-size:18px;font-weight:700;max-width:46ch}
+.string{min-height:62px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;background:rgba(255,255,255,.6);border-radius:16px;padding:8px 12px;width:100%;max-width:640px}
+.tile{width:48px;height:48px;border-radius:50%;border:0;font-family:var(--display);font-size:24px;font-weight:800;color:#fff;box-shadow:inset -5px -5px 0 rgba(0,0,0,.15)}
+.tile.used{visibility:hidden}
+.wcard{border:0;border-radius:12px;padding:8px 14px;background:#fff;font-weight:800;font-size:18px;box-shadow:0 2px 0 #CDBFA8}
+.wcard.used{visibility:hidden}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.ghost{border:2px solid var(--thread);background:transparent;border-radius:14px;padding:10px 18px;font-weight:800}
+.math{font-family:var(--display);font-size:clamp(28px,7vw,42px);font-weight:800;color:var(--thread);font-variant-numeric:tabular-nums}
+.sent{border:3px solid transparent;border-radius:14px;background:#fff;padding:12px 16px;font-size:18px;font-weight:700;text-align:left;width:100%;max-width:560px}
+.sent.right{border-color:var(--ok);background:#E3F5E9}
+.sent.wrong{border-color:var(--bad);background:#FBE3DE}
+.timer{font-family:var(--display);font-size:64px;font-weight:800;color:var(--plum);font-variant-numeric:tabular-nums}
+.correct-word{font-family:var(--display);font-size:30px;font-weight:800;letter-spacing:.04em}
+.correct-word span{color:var(--plum)}
+
+.party{position:fixed;inset:0;display:grid;place-items:center;background:rgba(35,35,43,.55);z-index:20;padding:20px}
+.party div{background:#fff;border-radius:24px;padding:28px;max-width:360px;text-align:center;display:flex;flex-direction:column;gap:12px}
+.party h3{font-size:32px}
+@media (max-width:480px){.stage{padding:18px 12px}.cars{grid-template-columns:repeat(5,minmax(0,52px))}.tile{width:42px;height:42px;font-size:21px}.craft{grid-template-columns:1fr}}
+</style>
+
+<div class="wrap" id="app"></div>
+
+<script>
+/* ===================== helpers ===================== */
+const $ = (s,el=document)=>el.querySelector(s);
+const rand=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function speak(text,lang='en-IN'){try{const u=new SpeechSynthesisUtterance(text);u.lang=lang;u.rate=.85;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+const CAR=(c='currentColor')=>`<svg viewBox="0 0 64 32" aria-hidden="true"><path d="M4 22v-5c0-2 1-3 3-3.5l9-1.6 7-6.2c1-.9 2.4-1.4 3.8-1.4h12.4c1.5 0 2.9.6 3.9 1.7l6 6 6.6 1.2c2 .4 3.3 1.6 3.3 3.6v5.2c0 .9-.7 1.5-1.5 1.5H55a6 6 0 0 0-12 0H22a6 6 0 0 0-12 0H5.5C4.7 23.5 4 22.9 4 22z" fill="${c}"/><path d="M25 8.6h7.5v4.9H19.6zM35.5 8.6h5.8l4.8 4.9H35.5z" fill="#DCEFF7"/><circle cx="16" cy="24" r="4.6" fill="#23232B"/><circle cx="49" cy="24" r="4.6" fill="#23232B"/><circle cx="16" cy="24" r="1.8" fill="#C9C9CF"/><circle cx="49" cy="24" r="1.8" fill="#C9C9CF"/></svg>`;
+const CAR_COLORS=['#E8432E','#2A6FDB','#F6C431','#2F9E58','#8E44AD','#F08A24','#14A3A3','#D6336C'];
+const FELT=['#E86A8E','#2A9D8F','#F4A259','#6D4C8D','#3D8BD9','#E9C46A','#C0504D','#7BB662'];
+
+/* ===================== saved progress (this browser only) ===================== */
+const today=new Date().toISOString().slice(0,10);
+function fresh(){return{ag:{pos:0,stars:0},vb:{beads:0,patches:0,missed:[]},day:today,t:{ag:0,vb:0}}}
+let S;try{S=JSON.parse(localStorage.getItem('lc-progress'))||fresh()}catch(e){S=fresh()}
+if(S.day!==today){S.day=today;S.t={ag:0,vb:0}}
+function save(){try{localStorage.setItem('lc-progress',JSON.stringify(S))}catch(e){}}
+
+/* ===================== content ===================== */
+const NUMW=['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen','twenty'];
+const BRANDS=['Audi','BMW','Chevrolet','Ford','Honda','Hyundai','Jeep','Kia','Lamborghini','Mahindra','Maruti','Nissan','Porsche','Renault','Skoda','Tata','Toyota','Volkswagen','Volvo','Ferrari','Bentley','Genesis'];
+const CVC=[['cat','🐱'],['bus','🚌'],['car','🚗'],['sun','☀️'],['pen','🖊️'],['cup','☕'],['hat','🎩'],['bat','🦇'],['dog','🐶'],['van','🚐'],['jeep','🚙'],['fan','🪭'],['box','📦'],['bed','🛏️'],['egg','🥚'],['fox','🦊'],['pig','🐷'],['net','🥅'],['map','🗺️'],['bag','🎒']];
+const KN=[['ಅ','a'],['ಆ','aa'],['ಇ','i'],['ಈ','ee'],['ಉ','u'],['ಊ','oo'],['ಎ','e'],['ಏ','ae'],['ಐ','ai'],['ಒ','o'],['ಓ','oh'],['ಔ','au'],['ಕ','ka'],['ಗ','ga'],['ಚ','cha'],['ಜ','ja'],['ತ','ta'],['ದ','da'],['ನ','na'],['ಪ','pa'],['ಬ','ba'],['ಮ','ma'],['ಯ','ya'],['ರ','ra'],['ಲ','la'],['ವ','va'],['ಸ','sa']];
+const HI=[['अ','a'],['आ','aa'],['इ','i'],['ई','ee'],['उ','u'],['ऊ','oo'],['ए','e'],['ऐ','ai'],['ओ','o'],['औ','au'],['क','ka'],['ख','kha'],['ग','ga'],['घ','gha'],['च','cha'],['ज','ja'],['त','ta'],['द','da'],['न','na'],['प','pa'],['ब','ba'],['म','ma'],['र','ra'],['ल','la'],['स','sa']];
+
+const SPELL=[
+ ['necessary','needed; something you must have','ne-ces-sa-ry'],['beautiful','very pretty','beau-ti-ful'],
+ ['environment','the air, water and land around us','en-vi-ron-ment'],['government','the people who run a country or state','go-vern-ment'],
+ ['separate','to keep things apart','se-pa-rate'],['believe','to think something is true','be-lie-ve'],
+ ['receive','to get something someone gives you','re-cei-ve'],['friend','a person you like and trust','fri-end'],
+ ['knowledge','what you know and have learned','know-ledge'],['February','the second month of the year','Feb-ru-a-ry'],
+ ['Wednesday','the day after Tuesday','Wed-nes-day'],['science','the subject about how nature works','sci-ence'],
+ ['interesting','makes you want to know more','in-ter-est-ing'],['because','for the reason that','be-cause'],
+ ['different','not the same','dif-fer-ent'],['tomorrow','the day after today','to-mor-row'],
+ ['address','where a person lives','ad-dress'],['library','a place full of books to borrow','li-bra-ry'],
+ ['island','land with water all around it','is-land'],['temperature','how hot or cold something is','tem-pe-ra-ture'],
+ ['vegetable','a plant we eat, like a carrot','ve-ge-ta-ble'],['sentence','a group of words that makes full sense','sen-ten-ce'],
+ ['answer','the reply to a question','an-swer'],['neighbour','a person who lives next to you','neigh-bour'],
+ ['favourite','the one you like the most','fa-vou-rite'],['colour','red, blue and green are each one','co-lour'],
+ ['surprise','something you did not expect','sur-prise'],['experiment','a test done to learn something in science','ex-pe-ri-ment'],
+ ['paragraph','a group of sentences about one idea','pa-ra-graph'],['scissors','a tool with two blades for cutting paper','scis-sors']
+];
+const SENTENCES=['I go to school by bus.','My mother cooks tasty food.','She is reading a story book.','We played cricket in the evening.','Can you help me, please?','The sun rises in the east.','I am going to the market.','He does not like milk.','My favourite subject is science.','I made a paper boat today.','Please give me a glass of water.','They are watching a cartoon.','I have finished my homework.','Where are you going?','Our school has a big library.'];
+const GRAMMAR=[
+ [['He doesn\'t know the answer.','He don\'t know the answer.','He not know the answer.'],'With he, she or it we use "doesn\'t", not "don\'t".'],
+ [['I have two brothers.','I am having two brothers.','I having two brothers.'],'For things you own or family you have, say "I have", not "I am having".'],
+ [['My name is Vibhavari.','Myself Vibhavari.','Me Vibhavari name.'],'To introduce yourself, say "My name is…" or "I am…". "Myself…" is a common mistake.'],
+ [['Where are you going?','Where you are going?','Where you going?'],'In a question, the helping word "are" comes before "you".'],
+ [['I didn\'t go to the park.','I didn\'t went to the park.','I not went to the park.'],'After "didn\'t" use the base word: go, eat, play — not went, ate, played.'],
+ [['She is taller than me.','She is more taller than me.','She is tallest than me.'],'Use "taller" alone. "More taller" uses two comparing words together.'],
+ [['I went there yesterday.','I have gone there yesterday.','I go there yesterday.'],'With "yesterday" (a finished time) use the past: "went".'],
+ [['Each of the girls has a pencil.','Each of the girls have a pencil.','Each of the girl have a pencil.'],'"Each" means one at a time, so it takes "has".'],
+ [['I am good at drawing.','I am good in drawing.','I good at drawing.'],'We say "good at" a skill.'],
+ [['Can I borrow your eraser?','Can I lend your eraser?','Can I borrow to your eraser?'],'You "borrow" from someone. They "lend" to you.'],
+ [['There are many books on the table.','There is many books on the table.','There many books on the table.'],'For more than one thing, use "there are".'],
+ [['She sings very well.','She sings very good.','She very well sings.'],'"Well" tells how someone does something. "Good" describes a thing.']
+];
+const TALK=['Tell about your favourite craft. What do you need and how do you make it?','Describe your best friend. What do you like doing together?','What did you do last Sunday? Tell it from morning to night.','If you could visit any place in India, where would you go and why?','Explain how to make a paper boat, step by step.','Tell about your school. What do you like most there?','Describe your favourite festival and how your family celebrates it.','What do you want to become when you grow up, and why?'];
+
+/* ===================== screens ===================== */
+const app=$('#app');
+let view='home', agAct='count', vbAct='spell';
+
+function home(){
+  view='home';
+  const miss=S.vb.missed.slice(-10);
+  app.innerHTML=`
+  <header class="hello"><h1>Who is learning today?</h1><p>Short games, 10–15 minutes a day. Sit with them for the first few days and play along.</p></header>
+  <div class="doors">
+    <button class="door ag" id="go-ag"><span class="tag">LKG · Age 5</span><h2>Agasthya's Garage</h2><p>Count cars, find letters, race to the finish flag.</p><span class="mini-car">${CAR()}</span></button>
+    <button class="door vb" id="go-vb"><span class="tag">Class 6 · Age 11</span><h2>Vibhavari's Craft Table</h2><p>Spell with beads, build sentences, sew a maths quilt.</p><span class="mini-q">${FELT.slice(0,6).map((c,i)=>`<i style="background:${i<S.vb.patches?c:'transparent'};border:1px dashed rgba(59,47,42,.35)"></i>`).join('')}</span></button>
+  </div>
+  <section class="parent">
+    <h3>Parent corner</h3>
+    <div class="row">
+      <span class="chip">Agasthya today: ${S.t.ag} right answers</span>
+      <span class="chip">Stars won: ${S.ag.stars}</span>
+      <span class="chip">Vibhavari today: ${S.t.vb} right answers</span>
+      <span class="chip">Quilt patches: ${S.vb.patches}</span>
+    </div>
+    ${miss.length?`<p class="small">Spellings Vibhavari got wrong (they come back more often):</p><div class="row">${miss.map(w=>`<span class="chip miss">${esc(w)}</span>`).join('')}</div>`:`<p class="small">Spellings she gets wrong will show here, so you can practise them in the car or at dinner.</p>`}
+    <p class="small">Progress is saved in this browser only. Use the same phone or laptop each day.</p>
+  </section>`;
+  $('#go-ag').onclick=()=>agWorld(); $('#go-vb').onclick=()=>vbWorld();
+}
+
+/* ---------- reward celebration ---------- */
+function party(title,text,say){
+  const d=document.createElement('div');d.className='party';
+  d.innerHTML=`<div><h3>${title}</h3><p>${text}</p><button class="next" style="background:var(--plum)">Keep going</button></div>`;
+  document.body.appendChild(d);speak(say);$('button',d).onclick=()=>d.remove();
+}
+
+/* ===================== AGASTHYA ===================== */
+const AG_TABS=[['count','Count cars'],['abc','Car letters'],['words','Little words'],['kn','ಕನ್ನಡ'],['hi','हिंदी']];
+function agWorld(){
+  view='ag';
+  app.innerHTML=`<div class="world ag-world">
+    <div class="top"><button class="back" id="back">← Home</button><h2>Agasthya's Garage</h2></div>
+    <div class="track"><div class="lane"><span class="racer" id="racer">${CAR()}</span><span class="flag"></span></div>
+      <div class="meta"><span id="steps"></span><span id="stars"></span></div></div>
+    <div class="tabs">${AG_TABS.map(([k,l])=>`<button class="tab ${k===agAct?'on':''}" data-k="${k}">${l}</button>`).join('')}</div>
+    <div class="stage" id="stage"></div></div>`;
+  $('#back').onclick=home;
+  app.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{agAct=b.dataset.k;agWorld()});
+  agTrack();agNext();
+}
+function agTrack(){
+  const r=$('#racer');if(!r)return;
+  r.style.left=`calc(${S.ag.pos/10} * (100% - 96px))`;
+  $('#steps').textContent=`${10-S.ag.pos} more to the flag`;
+  $('#stars').textContent=`★ ${S.ag.stars} stars`;
+}
+function agWin(){
+  S.t.ag++;S.ag.pos++;
+  if(S.ag.pos>=10){S.ag.pos=0;S.ag.stars++;save();agTrack();party('You won the race!',`Star number ${S.ag.stars} for Agasthya.`,'You won the race! Super driver Agasthya!');}
+  else{save();agTrack();}
+}
+const hardMode=()=>S.ag.stars>=3;
+
+function agQuestion(){
+  if(agAct==='count'){
+    const max=hardMode()?15:10,n=rand(1,max);
+    const set=new Set([n]);while(set.size<3){const d=n+pick([-2,-1,1,2,3]);if(d>0&&d<=20)set.add(d)}
+    return{html:`<div class="prompt">How many cars?</div><div class="cars">${Array.from({length:n},(_,i)=>`<span>${CAR(CAR_COLORS[i%8])}</span>`).join('')}</div>`,
+      opts:shuffle([...set]).map(v=>({label:v,val:v})),ans:n,say:'How many cars? Count them with your finger!',good:`Yes! ${NUMW[n]} cars!`,again:'Count again, slowly, one by one.'};
+  }
+  if(agAct==='abc'){
+    if(Math.random()<.5){
+      const b=pick(BRANDS),L=b[0];
+      const set=new Set([L]);while(set.size<3)set.add(pick('ABCDEFGHJKLMNPRSTV'.split('')));
+      return{html:`<div style="width:150px;color:${pick(CAR_COLORS)}">${CAR()}</div><div class="brand"><b>${L}</b>${b.slice(1)}</div><div class="prompt">${b} starts with which letter?</div>`,
+        opts:shuffle([...set]).map(v=>({label:v,val:v})),ans:L,say:`${b}. ${b} starts with which letter?`,good:`Yes! ${b} starts with ${L}!`,again:`Listen: ${b}. Look at the first letter.`};
+    }
+    const b=pick(BRANDS),L=b[0];
+    const others=shuffle(BRANDS.filter(x=>x[0]!==L)).slice(0,2);
+    return{html:`<div class="big-letter">${L}</div><div class="prompt">Which car starts with ${L}?</div>`,
+      opts:shuffle([b,...others]).map(v=>({label:v,val:v})),ans:b,say:`Which car starts with ${L}?`,good:`Yes! ${L} for ${b}!`,again:`Find the car name that begins with ${L}.`,small:true};
+  }
+  if(agAct==='words'){
+    const [w,p]=pick(CVC),L=w[0];
+    const set=new Set([L]);while(set.size<3)set.add(pick('bcdfghjmnpstv'.split('')));
+    return{html:`<div class="pic">${p}</div><div class="word"><span class="gap">?</span>${w.slice(1)}</div><div class="prompt">What letter starts “${w}”?</div>`,
+      opts:shuffle([...set]).map(v=>({label:v,val:v})),ans:L,say:`${w}. What sound does ${w} start with?`,good:`${w.split('').join(', ')}. ${w}!`,again:`Say it slowly: ${w}.`};
+  }
+  const list=agAct==='kn'?KN:HI,[ch,snd]=pick(list),cls=agAct;
+  const others=shuffle(list.filter(x=>x[0]!==ch)).slice(0,3).map(x=>x[0]);
+  const listen=hardMode()||S.ag.pos%3===2;
+  const voice=agAct==='hi'?['hi-IN',ch]:['en-IN',snd];
+  return{html:listen?`<div class="prompt">Listen and find: “${snd}”</div><p class="hint">Tap the speaker to hear it again</p>`
+      :`<div class="big-letter ${cls}">${ch}</div><div class="prompt">Find the same letter · “${snd}”</div>`,
+    opts:shuffle([ch,...others]).map(v=>({label:v,val:v,cls})),ans:ch,say:voice[1],lang:voice[0],good:`Yes! ${snd}!`,again:'Look carefully at the shape.'};
+}
+function agNext(){
+  const st=$('#stage');if(!st)return;const q=agQuestion();
+  st.innerHTML=`${q.html}<button class="say" id="say">🔊 Hear it</button><div class="opts">${q.opts.map(o=>`<button class="opt ${o.cls||''}" ${q.small?'style="font-size:20px"':''} data-v="${esc(o.val)}">${esc(o.label)}</button>`).join('')}</div><div class="feedback" id="fb"></div>`;
+  const s=()=>speak(q.say,q.lang||'en-IN');s();$('#say').onclick=s;
+  let done=false;
+  st.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    if(done)return;
+    if(b.dataset.v==String(q.ans)){done=true;b.classList.add('right');$('#fb').className='feedback ok';$('#fb').textContent='Great job! 🏁';speak(q.good);agWin();setTimeout(agNext,1600)}
+    else{b.classList.add('wrong');$('#fb').className='feedback no';$('#fb').textContent='Try again!';speak(q.again);setTimeout(()=>b.classList.remove('wrong'),400)}
+  });
+}
+
+/* ===================== VIBHAVARI ===================== */
+const VB_TABS=[['spell','Spelling beads'],['math','Maths lab'],['build','Sentence builder'],['fix','Fix the sentence'],['talk','1-minute talk']];
+function vbWorld(){
+  view='vb';
+  app.innerHTML=`<div class="world vb-world">
+    <div class="top"><button class="back" id="back">← Home</button><h2>Vibhavari's Craft Table</h2></div>
+    <div class="craft"><div><div class="label">Bracelet · 10 beads makes a quilt patch</div><div class="bracelet" id="brace"></div></div>
+      <div><div class="label">Quilt</div><div class="quilt" id="quilt"></div></div></div>
+    <div class="tabs">${VB_TABS.map(([k,l])=>`<button class="tab ${k===vbAct?'on':''}" data-k="${k}">${l}</button>`).join('')}</div>
+    <div class="stage" id="stage"></div></div>`;
+  $('#back').onclick=home;
+  app.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{vbAct=b.dataset.k;vbWorld()});
+  vbCraft();vbNext();
+}
+function vbCraft(){
+  const br=$('#brace');if(!br)return;
+  br.innerHTML=Array.from({length:10},(_,i)=>`<span class="bead ${i<S.vb.beads?'on':''}" style="${i<S.vb.beads?`background:${FELT[i%8]}`:''}"></span>`).join('');
+  $('#quilt').innerHTML=Array.from({length:12},(_,i)=>i<S.vb.patches?`<i style="border:0;background:${FELT[i%8]};background-image:${['repeating-linear-gradient(45deg,rgba(255,255,255,.35) 0 3px,transparent 3px 7px)','radial-gradient(rgba(255,255,255,.5) 2px,transparent 2.5px) 0 0/7px 7px','linear-gradient(90deg,rgba(255,255,255,.3) 50%,transparent 0) 0 0/8px 8px'][i%3]}"></i>`:'<i></i>').join('');
+}
+function vbWin(){
+  S.t.vb++;S.vb.beads++;
+  if(S.vb.beads>=10){S.vb.beads=0;S.vb.patches++;save();vbCraft();party('New quilt patch!',`Patch ${S.vb.patches} of 12 is sewn. Finish all 12 and ask for a real craft reward!`,'Well done Vibhavari! A new quilt patch!')}
+  else{save();vbCraft();}
+}
+function feedback(ok,msg){const f=$('#fb');f.className='feedback '+(ok?'ok':'no');f.textContent=msg}
+function nextBtn(){const b=document.createElement('button');b.className='next';b.textContent='Next →';b.onclick=vbNext;$('#stage').appendChild(b);b.focus()}
+
+/* spelling */
+function spellQ(){
+  const missed=S.vb.missed;
+  if(missed.length&&Math.random()<.4){const w=pick(missed);const f=SPELL.find(x=>x[0]===w);if(f)return f}
+  return pick(SPELL);
+}
+function vbSpell(st){
+  const [word,mean,chunks]=spellQ();
+  const letters=shuffle(word.toLowerCase().split('').map((c,i)=>({c,i})));
+  let built=[];
+  st.innerHTML=`<div class="prompt">Spell the word</div><p class="meaning">Meaning: ${esc(mean)}</p>
+    <button class="say" id="say">🔊 Hear the word</button>
+    <div class="string" id="str"><span class="hint">Tap the beads in order</span></div>
+    <div class="opts" id="beads">${letters.map((l,k)=>`<button class="tile" data-k="${k}" style="background:${FELT[k%8]}">${l.c}</button>`).join('')}</div>
+    <div class="btnrow"><button class="ghost" id="clr">Clear</button><button class="next" id="chk">Check</button></div>
+    <div class="feedback" id="fb"></div><div id="after"></div>`;
+  const s=()=>speak(word);s();$('#say').onclick=s;
+  const draw=()=>{const str=$('#str');str.innerHTML=built.length?built.map((k,i)=>`<button class="tile" data-i="${i}" style="background:${FELT[k%8]}">${letters[k].c}</button>`).join(''):'<span class="hint">Tap the beads in order</span>';
+    st.querySelectorAll('#beads .tile').forEach(b=>b.classList.toggle('used',built.includes(+b.dataset.k)));
+    str.querySelectorAll('.tile').forEach(b=>b.onclick=()=>{built.splice(+b.dataset.i,1);draw()})};
+  st.querySelectorAll('#beads .tile').forEach(b=>b.onclick=()=>{const k=+b.dataset.k;if(!built.includes(k)){built.push(k);draw()}});
+  $('#clr').onclick=()=>{built=[];draw()};
+  $('#chk').onclick=()=>{
+    const ans=built.map(k=>letters[k].c).join('');
+    if(ans.length<word.length){feedback(false,'Use all the beads first.');return}
+    $('#chk').disabled=true;$('#clr').disabled=true;
+    const ok=ans===word.toLowerCase();
+    if(ok){feedback(true,'Perfect spelling!');speak('Perfect! '+word);S.vb.missed=S.vb.missed.filter(w=>w!==word);vbWin()}
+    else{feedback(false,'Almost! Look at the right spelling:');speak(`The correct spelling is ${word.split('').join(' ')}`);if(!S.vb.missed.includes(word))S.vb.missed.push(word);S.vb.missed=S.vb.missed.slice(-20);save()}
+    $('#after').innerHTML=`<div class="correct-word">${esc(word)}</div><p class="hint">Break it into parts: <span style="color:var(--plum)">${esc(chunks)}</span>. Write it 3 times in your notebook.</p>`;
+    nextBtn();
+  };
+}
+
+/* maths */
+const fmt=n=>String(+n.toFixed(2));
+function gcd(a,b){return b?gcd(b,a%b):a}
+function mathQ(){
+  const t=pick(['int','int','frac','cmp','lcm','hcf','dec','bod','per']);
+  const near=(a,ds)=>{const s=new Set([String(a)]);for(const d of ds){if(s.size>=4)break;s.add(String(d))}return shuffle([...s])};
+  if(t==='int'){let a=rand(-12,12)||5,b=rand(-12,12)||-4;const add=Math.random()<.5,ans=add?a+b:a-b;
+    const bs=b<0?`(${b})`:b;
+    return{q:`${a} ${add?'+':'−'} ${bs} = ?`,opts:near(ans,[-ans,ans+1,ans-2,add?a-b:a+b]),ans:String(ans),
+      ex:`Start at ${a} on the number line. ${add?(b>=0?`Adding ${b} moves ${b} steps right.`:`Adding ${b} (negative) moves ${-b} steps left.`):(b>=0?`Subtracting ${b} moves ${b} steps left.`:`Subtracting ${b} is the same as adding ${-b}, so move ${-b} steps right.`)} You land on ${ans}.`}}
+  if(t==='frac'){const [p,q]=pick([[1,2],[2,3],[3,4],[2,5],[3,5],[4,5],[1,3],[5,6],[3,7]]),k=rand(2,6);
+    return{q:`Simplify ${p*k}/${q*k}`,opts:near(`${p}/${q}`,[`${p+1}/${q}`,`${p}/${q+1}`,`${p*k}/${q}`,`${q}/${p}`]),ans:`${p}/${q}`,
+      ex:`The biggest number that divides both ${p*k} and ${q*k} is ${k}. Divide top and bottom by ${k}: ${p*k}÷${k} = ${p}, ${q*k}÷${k} = ${q}. So the answer is ${p}/${q}.`}}
+  if(t==='cmp'){let a,b,c,d;do{a=rand(1,6);b=rand(a+1,9);c=rand(1,6);d=rand(c+1,9)}while(a*d===b*c);
+    const big=a*d>b*c?`${a}/${b}`:`${c}/${d}`;
+    return{q:`Which is bigger: ${a}/${b} or ${c}/${d}?`,opts:[`${a}/${b}`,`${c}/${d}`],ans:big,
+      ex:`Cross multiply: ${a} × ${d} = ${a*d} and ${c} × ${b} = ${b*c}. The side with the bigger product wins, so ${big} is bigger.`}}
+  if(t==='lcm'){const a=rand(2,10);let b=rand(2,12);if(a===b)b++;const l=a*b/gcd(a,b);
+    const ma=[1,2,3,4,5,6].map(i=>a*i).join(', '),mb=[1,2,3,4,5,6].map(i=>b*i).join(', ');
+    return{q:`LCM of ${a} and ${b} = ?`,opts:near(l,[a*b===l?l+a:a*b,gcd(a,b),l+b,l*2]),ans:String(l),
+      ex:`Multiples of ${a}: ${ma}… Multiples of ${b}: ${mb}… The smallest number in both lists is ${l}.`}}
+  if(t==='hcf'){const k=rand(2,9),a=rand(1,6);let b=rand(1,7);if(gcd(a,b)!==1)b=a+1;const x=k*a,y=k*b,h=k*gcd(a,b);
+    return{q:`HCF of ${x} and ${y} = ?`,opts:near(h,[h*2,h===1?3:1,x,h+1]),ans:String(h),
+      ex:`The factors of ${x} and ${y} that are common to both: the biggest one is ${h}. Check: ${x} ÷ ${h} = ${x/h} and ${y} ÷ ${h} = ${y/h}, both whole numbers.`}}
+  if(t==='dec'){const a=rand(10,99)/10,b=rand(100,999)/100,ans=a+b;
+    return{q:`${fmt(a)} + ${fmt(b)} = ?`,opts:near(fmt(ans),[fmt(ans+.1),fmt(ans-1),fmt(a*10+b),fmt(ans+1)]),ans:fmt(ans),
+      ex:`Write them one under the other with the decimal points in a straight line: ${a.toFixed(2)} + ${b.toFixed(2)}. Add like normal numbers and keep the point in the same place: ${ans.toFixed(2)}.`}}
+  if(t==='bod'){const a=rand(2,12),b=rand(2,9),c=rand(2,9),ans=a+b*c,wrong=(a+b)*c;
+    return{q:`${a} + ${b} × ${c} = ?`,opts:near(ans,[wrong,ans+1,b*c,a*b+c]),ans:String(ans),
+      ex:`BODMAS: Multiply before you add. First ${b} × ${c} = ${b*c}, then ${a} + ${b*c} = ${ans}. (Adding first gives ${wrong}, which is wrong.)`}}
+  const l=rand(4,15),w=rand(2,10),p=2*(l+w);
+  return{q:`Rectangle: length ${l} cm, breadth ${w} cm. Perimeter = ?`,opts:near(`${p} cm`,[`${l*w} cm`,`${l+w} cm`,`${p+2} cm`]),ans:`${p} cm`,
+    ex:`Perimeter is the distance all around: ${l} + ${w} + ${l} + ${w} = 2 × (${l} + ${w}) = ${p} cm. (Area would be ${l} × ${w} = ${l*w} sq cm.)`};
+}
+function vbMath(st){
+  const q=mathQ();
+  st.innerHTML=`<p class="hint">Work it out in your notebook first, then tap.</p><div class="math">${q.q}</div>
+    <div class="opts">${q.opts.map(o=>`<button class="opt" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div><div class="feedback" id="fb"></div><div id="after" style="width:100%;display:flex;justify-content:center"></div>`;
+  let done=false;
+  st.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    if(done)return;done=true;const ok=b.dataset.v===q.ans;
+    b.classList.add(ok?'right':'wrong');
+    if(!ok)st.querySelectorAll('.opt').forEach(x=>{if(x.dataset.v===q.ans)x.classList.add('right')});
+    feedback(ok,ok?'Correct!':`The answer is ${q.ans}.`);if(ok)vbWin();
+    $('#after').innerHTML=`<div class="explain"><strong>How to solve it:</strong> ${esc(q.ex)}</div>`;nextBtn();
+  });
+}
+
+/* sentence builder */
+function vbBuild(st){
+  const s=pick(SENTENCES),words=s.split(' ');const order=shuffle(words.map((w,i)=>({w,i})));let built=[];
+  st.innerHTML=`<div class="prompt">Make a correct sentence</div><p class="hint">Tap the word cards in the right order.</p>
+    <div class="string" id="str"></div><div class="opts" id="pool">${order.map((o,k)=>`<button class="wcard" data-k="${k}">${esc(o.w)}</button>`).join('')}</div>
+    <div class="btnrow"><button class="ghost" id="clr">Clear</button><button class="next" id="chk">Check</button></div><div class="feedback" id="fb"></div><div id="after"></div>`;
+  const draw=()=>{const str=$('#str');str.innerHTML=built.length?built.map((k,i)=>`<button class="wcard" data-i="${i}">${esc(order[k].w)}</button>`).join(''):'<span class="hint">Your sentence goes here</span>';
+    st.querySelectorAll('#pool .wcard').forEach(b=>b.classList.toggle('used',built.includes(+b.dataset.k)));
+    str.querySelectorAll('.wcard').forEach(b=>b.onclick=()=>{built.splice(+b.dataset.i,1);draw()})};
+  draw();
+  st.querySelectorAll('#pool .wcard').forEach(b=>b.onclick=()=>{const k=+b.dataset.k;if(!built.includes(k)){built.push(k);draw()}});
+  $('#clr').onclick=()=>{built=[];draw()};
+  $('#chk').onclick=()=>{
+    if(built.length<words.length){feedback(false,'Use all the word cards.');return}
+    const ans=built.map(k=>order[k].w).join(' '),ok=ans===s;$('#chk').disabled=true;$('#clr').disabled=true;
+    feedback(ok,ok?'Well built! Now read it aloud.':'Not quite. The correct sentence is:');speak(s);if(ok)vbWin();
+    if(!ok)$('#after').innerHTML=`<p class="correct-word" style="font-size:22px">${esc(s)}</p>`;nextBtn();
+  };
+}
+
+/* fix the sentence */
+function vbFix(st){
+  const [opts,why]=pick(GRAMMAR),right=opts[0];
+  st.innerHTML=`<div class="prompt">Which sentence is correct?</div><div style="display:flex;flex-direction:column;gap:10px;width:100%;align-items:center">${shuffle(opts).map(o=>`<button class="sent" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div><div class="feedback" id="fb"></div><div id="after" style="width:100%;display:flex;justify-content:center"></div>`;
+  let done=false;
+  st.querySelectorAll('.sent').forEach(b=>b.onclick=()=>{
+    if(done)return;done=true;const ok=b.dataset.v===right;b.classList.add(ok?'right':'wrong');
+    st.querySelectorAll('.sent').forEach(x=>{if(x.dataset.v===right)x.classList.add('right')});
+    feedback(ok,ok?'Correct!':'Good try. The green one is right.');speak(right);if(ok)vbWin();
+    $('#after').innerHTML=`<div class="explain"><strong>Why:</strong> ${esc(why)} Say the correct sentence aloud 2 times.</div>`;nextBtn();
+  });
+}
+
+/* 1-minute talk */
+let tick=null;
+function vbTalk(st){
+  const p=pick(TALK);let left=60;clearInterval(tick);
+  st.innerHTML=`<div class="prompt">Speak in English for 1 minute</div><p class="meaning">${esc(p)}</p>
+    <p class="hint">Talk to Amma or Appa. Use full sentences. Mistakes are fine — keep talking!</p>
+    <div class="timer" id="tm">1:00</div>
+    <div class="btnrow"><button class="next" id="start">Start timer</button><button class="ghost" id="other">Another topic</button></div>
+    <div class="feedback" id="fb"></div>`;
+  $('#other').onclick=vbNext;
+  $('#start').onclick=()=>{$('#start').disabled=true;clearInterval(tick);tick=setInterval(()=>{left--;const t=$('#tm');if(!t){clearInterval(tick);return}
+    t.textContent=`0:${String(left).padStart(2,'0')}`;
+    if(left<=0){clearInterval(tick);t.textContent='Done!';feedback(true,'Great talking! Parent: tap below if she spoke the full minute.');
+      const b=document.createElement('button');b.className='next';b.textContent='She spoke well — add 2 beads';b.onclick=()=>{vbWin();vbWin();vbNext()};$('#stage').appendChild(b)}},1000)};
+}
+function vbNext(){
+  const st=$('#stage');if(!st)return;clearInterval(tick);
+  ({spell:vbSpell,math:vbMath,build:vbBuild,fix:vbFix,talk:vbTalk})[vbAct](st);
+}
+
+home();
+</script>
